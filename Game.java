@@ -21,7 +21,7 @@ public class Game {
 
     /** Private variables */
     private MapBlock[] mapBlockList = new MapBlock[MAIN_LOOP_SIZE + FINAL_ROUTE_LENGTH*4]; // The list to keep track of all the blocks in the game, including the main loop and the final routes for each player
-    private int turnCounter = 0; // To keep track of the current turn
+    private int turnCount; // To keep track of the current turn
 
     private Player[] players;
     private Player currPlayer; // To keep track of the current player
@@ -38,7 +38,7 @@ public class Game {
         for (int i = 0; i < mapBlockList.length; i++) {
             String color = "";
 
-            if ((i < MAIN_LOOP_SIZE) && (i % 4 == 0)) { // Handle the main loop blocks
+            if ((i < MAIN_LOOP_SIZE) && (i % 4 == 0)) { // Handle the main loop blocks' colors
                 color = RED;
             } else if ((i < MAIN_LOOP_SIZE) && (i % 4 == 1)) {
                 color = BLUE;
@@ -46,7 +46,7 @@ public class Game {
                 color = YELLOW;
             } else if ((i < MAIN_LOOP_SIZE) && (i % 4 == 3)) {
                 color = GREEN;
-            } else if ((i >= RED_ENTRY_INDEX) && (i < BLUE_ENTRY_INDEX)) {
+            } else if ((i >= RED_ENTRY_INDEX) && (i < BLUE_ENTRY_INDEX)) { // Handle the final route blocks' colors
                 color = RED;
             } else if ((i >= BLUE_ENTRY_INDEX) && (i < YELLOW_ENTRY_INDEX)) {
                 color = BLUE;

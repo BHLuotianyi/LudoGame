@@ -75,5 +75,18 @@ public class Game {
      */
     public Game() {
         initMap();
+        players = new Player[NUM_PLAYERS];
+        planes = new Plane[NUM_PLAYERS*4]; // Each player has 4 planes
+        turnCount = 0;
+    }
+
+    /** Public methods */
+
+    /**
+     * Checks if the game is over by determining if any player has all their planes in the final route.
+     * @return true if the game is over, false otherwise
+     */
+    public boolean getIfGameOver() {
+        return isGameOver;
     }
 }

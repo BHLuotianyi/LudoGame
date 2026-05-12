@@ -112,7 +112,7 @@ public class Game {
 
     /** Public methods */
 
-    public void movePlane(Plane plane, int steps) { // TODO: WIP!
+    public void movePlane(Plane plane, int steps, boolean ifJump) {
         if (!plane.getIsMoving()) {
             map[plane.getPos()].removePlane(plane); // Remove the plane from its current block
             plane.setIsMoving(true);
@@ -120,6 +120,16 @@ public class Game {
         plane.setPos(plane.getHeadingBlock());
         if ((map[plane.getPos()] instanceof EntryBlock) && (map[plane.getPos()].getColor().equals(plane.getColor()))) {
             plane.setHeadingBlock(((EntryBlock)map[plane.getPos()]).getLeadsToIndex());
+        } else {
+            plane.setHeadingBlock((plane.getHeadingBlock() + 1 ) % MAIN_LOOP_SIZE);
+        }
+        steps--;
+
+        if (steps > 0) {
+            movePlane(plane, steps, ifJump); // If there are still steps left to move, recursively call movePlane until the plane has moved the required number of steps
+        } else {
+            plane.setIsMoving(false);
+            map[plane.getPos()].onLanding(this, plane, ifJump); // Trigger the onLanding event for the block that the plane has landed on
         }
     }
 

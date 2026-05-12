@@ -68,7 +68,7 @@ public abstract class MapBlock {
         this.landingPlanes = new Plane[Game.NUM_PLAYERS*4]; // To prevent out of bounds, we can set this to a large number since a block can have multiple planes landing on it
     }
 
-    public void onLanding(Game game, Plane plane) {
+    public void onLanding(Game game, Plane plane, boolean ifJumped) {
         handleTraffic(game, plane);
     }
 

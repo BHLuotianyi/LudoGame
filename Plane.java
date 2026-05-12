@@ -21,10 +21,10 @@ public abstract class Plane {
     /**
      * Constructor for the Plane object.
      */
-    public Plane(Player owner, int level, int id, String name) {
+    public Plane(Player owner, int level, int id, String color, String name) {
         this.owner = owner;
         this.level = level;
-        this.id = id;
+        this.id = id; // The index of the plane in the global planes list
         this.name = name;
     }
 

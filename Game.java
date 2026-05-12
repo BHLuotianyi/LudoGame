@@ -71,10 +71,31 @@ public class Game {
 
     /** Initializes the players by creating Player objects for each player and assigning them their respective colors. */
     private void initPlayers() {
+        players = new Player[4];
         players[0] = new Player(0, RED);
         players[1] = new Player(1, BLUE);
         players[2] = new Player(2, YELLOW);
         players[3] = new Player(3, GREEN);
+    }
+
+    /** Initializes the planes for each player by creating Plane objects and assigning them to the respective players. */
+    private void initPlanes() {
+        this.planes = new Plane[NUM_PLAYERS*4]; // Reset the planes list to ensure it is empty before adding new planes
+        int newPlaneId = 0; // To assign a unique ID to each plane, which corresponds to its index in the global planes list
+        for (int i = 0; i < players.length; i++) { // i is the index of the player in the players list
+            Plane[] tempListOfPlanes = new Plane[4]; // Create a temporal list to storage newly created planes
+            for (int j = 0; j < 4; j++) { // j is the index of the plane in the player's planes list
+                if (j == 0) {
+                    tempListOfPlanes[j] = new CommanderPlane(getPlayerById(i), newPlaneId, getPlayerById(i).getShortName()+j); // A plane's short name would be e.g. "R0", "B1", etc. (the player's short name + the plane's index in the player's planes list) 
+                    planes[newPlaneId] = tempListOfPlanes[j];
+                } else {
+                    tempListOfPlanes[j] = new FighterPlane(getPlayerById(i), newPlaneId, getPlayerById(i).getShortName()+j);
+                    planes[newPlaneId] = tempListOfPlanes[j];
+                }
+                newPlaneId++;
+            }
+            players[i].setPlanes(tempListOfPlanes);
+        }
     }
 
 
@@ -84,9 +105,8 @@ public class Game {
      */
     public Game() {
         initMap();
-        players = new Player[NUM_PLAYERS];
-        planes = new Plane[NUM_PLAYERS*4]; // Each player has 4 planes
         initPlayers();
+        initPlanes();
         turnCount = 0;
     }
 
@@ -98,5 +118,52 @@ public class Game {
      */
     public boolean getIfGameOver() {
         return isGameOver;
+    }
+
+    /**
+     * Searches for a player by their ID in the players array.
+     * @param targetId the ID of the player to search for
+     * @return the player with the specified ID, or null if not found
+     */
+    public Player getPlayerById(int targetId) {
+        if (players == null) { // Defensive programming in case the players array has not been initialized
+            return null;
+        }
+        for (int i = 0; i < players.length; i++) {
+            if (players[i].getID() == targetId) {
+                return players[i];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Gets the color of a player by their ID.
+     * @param id the ID of the player
+     * @return the color of the player, or null if the player is not found
+     */
+    public String getColorById(int id) {
+        String result = getPlayerById(id).getColor();
+        if (result == null) { // Avoid null pointer exception
+            return null;
+        }
+        return result;
+    }
+
+    /**
+     * Gets a plane by its name.
+     * @param name the name of the plane to search for
+     * @return the plane with the specified name, or null if not found
+     */
+    public Plane getPlaneByName(String name) {
+        if (planes == null) { // Defensive programming in case the planes array has not been initialized
+            return null;
+        }
+        for (int i = 0; i < planes.length; i++) {
+            if (planes[i].getName().equals(name)) {
+                return planes[i];
+            }
+        }
+        return null;
     }
 }

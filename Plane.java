@@ -27,22 +27,42 @@ public abstract class Plane {
         this.id = id;
     }
 
+    /**
+     * Gets the plane's position (index in the map array).
+     * @return the plane's position
+     */
     public int getPos() {
         return this.pos;
     }
 
+    /**
+     * Sets the plane's position (index in the map array).
+     * @param index the new position of the plane
+     */
     public void setPos(int index) {
         this.pos = index;
     }
 
+    /**
+     * Gets the plane's owner player.
+     * @return the plane's owner
+     */
     public Player getOwner() {
         return this.owner;
     }
 
+    /**
+     * Gets the plane's ID.
+     * @return the plane's ID
+     */
     public int getId() {
         return this.id;
     }
 
+    /**
+     * Gets the plane's name.
+     * @return the plane's name in string format (e.g. "G1", "R2", etc.)
+     */
     public String getName() {
         return this.name;
     }

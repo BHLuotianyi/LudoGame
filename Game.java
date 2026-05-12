@@ -135,7 +135,7 @@ public class Game {
      * Initializes a new game with a fresh board, player list, plane list, and
      * turn counter.
      */
-    private Game() {
+    public Game() {
         initMap();
         initPlayers();
         initPlanes();

@@ -18,4 +18,22 @@ public abstract class MapBlock {
         this.color = color;
         this.landingPlanes = new Plane[Game.NUM_PLAYERS*4]; // To prevent out of bounds, we can set this to a large number since a block can have multiple planes landing on it
     }
+    public int getIndex() {
+        return this.index;
+    }
+
+    /**
+     * @return The color of the block.
+     */
+    public String getColor() {
+        return this.color;
+    }
+
+    /**
+     * @return The list of planes currently occupying this block.
+     */
+    public Plane[] getLandingPlanes() {
+        return this.landingPlanes;
+    }
 }
+

@@ -112,6 +112,13 @@ public class Game {
 
     /** Public methods */
 
+    public void sendPlaneHome(Plane plane) {
+        int currPos = plane.getPos();
+        plane.setIsAtHome(true);
+        mapBlockList[currPos].removePlane(plane); // Remove the plane from the block it is currently on
+        plane.setPos(-1);
+    }
+
     /**
      * Checks if the game is over by determining if any player has all their planes in the final route.
      * @return true if the game is over, false otherwise

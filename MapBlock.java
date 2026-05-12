@@ -27,7 +27,7 @@ public abstract class MapBlock {
      * @param game The game instance
      * @param newcomer The plane that is trying to land on the block
      */
-    private void checkCollide(Game game, Plane newcomer) {
+    private void checkCollide(Game game, Plane newcomer) { // TODO: Change this method to only use learnt knowledges
         int maxLevelInBlock = 0;
         for (int i = 0; i < landingPlanes.length; i++) { // Determine the maximum level of planes currently in the block
             if (landingPlanes[i] != null) {

@@ -132,6 +132,7 @@ public abstract class MapBlock {
                 break;
             }
         }
+        organizeLandingPlanes();
         if (landingPlanes[0] == null) {
             currLandingColor = null; // If there are no planes left on the block, reset the current landing color to null
         }

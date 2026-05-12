@@ -5,21 +5,22 @@
  */
 public abstract class MapBlock {
     /** Attributes */
-    private int index;
+    private int id;
     private String color;
     private Plane[] landingPlanes;
 
     /** Constructor 
-     * @param index The index of the block on the map
+     * @param id The ID of the block in the map list
      * @param color The color of the block (e.g., "RED", "BLUE", "YELLOW", "GREEN")
     */
-    public MapBlock(int index, String color) {
-        this.index = index;
+    public MapBlock(int id, String color) {
+        this.id = id;
         this.color = color;
         this.landingPlanes = new Plane[Game.NUM_PLAYERS*4]; // To prevent out of bounds, we can set this to a large number since a block can have multiple planes landing on it
     }
-    public int getIndex() {
-        return this.index;
+
+    public int getId() {
+        return this.id;
     }
 
     /**
@@ -35,5 +36,17 @@ public abstract class MapBlock {
     public Plane[] getLandingPlanes() {
         return this.landingPlanes;
     }
-}
 
+    /** Search for a plane from the block and remove it 
+     * @param targetPlane The plane to be removed from the block
+    */
+    public void removePlane(Plane targetPlane) {
+        for (int i = 0; i < landingPlanes.length; i++) {
+            if (landingPlanes[i] == targetPlane) {
+                landingPlanes[i] = null; // Remove the plane from the block by setting its position in the landingPlanes array to null
+                break;
+            }
+        }
+    }
+
+}

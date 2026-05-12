@@ -25,7 +25,10 @@ public abstract class Plane {
         this.owner = owner;
         this.level = level;
         this.id = id; // The index of the plane in the global planes list
+        this.color = color;
         this.name = name;
+        this.isAtHome = true; // Planes start at home by default
+        this.pos = -1; // Position is set to -1 when the plane is at home, and will be updated to the index of the map block when it moves out of home
     }
 
     /**
@@ -66,5 +69,13 @@ public abstract class Plane {
      */
     public String getName() {
         return this.name;
+    }
+
+    /**
+     * Sets if the plane is at home or not.
+     * @param isAtHome boolean value indicating if the plane is at home (true) or not (false)
+     */
+    public void setIsAtHome(boolean isAtHome) {
+        this.isAtHome = isAtHome;
     }
 }

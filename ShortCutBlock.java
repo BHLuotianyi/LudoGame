@@ -24,7 +24,7 @@ public class ShortCutBlock extends MainMapBlock {
      */
     public void onLanding(Game game, Plane plane, boolean ifJumped) {
         super.onLanding(game, plane, ifJumped);
-        if (plane.getColor().equals(this.getColor())) {
+        if (plane.getColor().equals(this.getColor()) && !plane.getIsAtHome()) { // Note: adding the "not at home" condition to prevent planes sent home from triggering the shortcut logic
             // TODO: Ask the player if they want to take the shortcut
             game.movePlane(plane, 12, false);
         }

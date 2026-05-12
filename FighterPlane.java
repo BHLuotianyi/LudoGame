@@ -4,6 +4,6 @@
  */
 public class FighterPlane extends Plane {
     public FighterPlane(Player owner, int id, String name) {
-        super(owner, 1, id, name);
+        super(owner, 1, id, owner.getColor(), name);
     }
 }

@@ -6,17 +6,19 @@
 public class Player {
     // Instance variables
     private int id;
-    private int color;
+    private String color;
     private int finishedCount;
     private Plane[] planes;
     private Plane[] home;
+    private String shortName;
 
     public Player(int id, String color) {
         this.id = id;
-        this.color = id; // Assuming color is represented by the player's ID (0-3)
+        this.color = color; // Assuming color is represented by the player's ID (0-3)
         this.finishedCount = 0;
         this.planes = new Plane[4]; // Each player has 4 planes
         this.home = new Plane[4]; // Each player has a home base of 4 planes
+        this.shortName = color.substring(0,1); // Short name for display purposes (e.g., "R" for Red)
     }
 
     /**
@@ -47,7 +49,7 @@ public class Player {
      * Gets the player's color in string format.
      * @return the player's color
      */
-    public int getColor() {
+    public String getColor() {
         return this.color;
     }
 
@@ -57,6 +59,14 @@ public class Player {
      */
     public Plane[] getPlanes() {
         return this.planes;
+    }
+
+    /**
+     * Sets the player's planes.
+     * @param planes the player's planes
+     */
+    public void setPlanes(Plane[] planes) {
+        this.planes = planes;
     }
 
     /**
@@ -73,5 +83,13 @@ public class Player {
      */
     public int getFinishedCount() {
         return this.finishedCount;
+    }
+
+    /**
+     * Gets the player's short name for display purposes.
+     * @return the player's short name
+     */
+    public String getShortName() {
+        return this.shortName;
     }
 }

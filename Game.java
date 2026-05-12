@@ -166,4 +166,38 @@ public class Game {
         }
         return null;
     }
+    /**
+     * @return The array of all map blocks (main loop + final routes).
+     */
+    public MapBlock[] getMap() {
+        return this.mapBlockList;
+    }
+
+    /**
+     * @return The total number of turns played so far.
+     */
+    public int getTurnCount() {
+        return this.turnCount;
+    }
+
+    /**
+     * @return The player whose turn it is currently.
+     */
+    public Player getCurrPlayer() {
+        return this.currPlayer;
+    }
+
+    /**
+     * @return The array of all players in the game.
+     */
+    public Player[] getPlayers() {
+        return this.players;
+    }
+
+    /**
+     * @return The array of all planes in the game.
+     */
+    public Plane[] getPlanes() {
+        return this.planes;
+    }
 }

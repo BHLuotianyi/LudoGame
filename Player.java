@@ -11,30 +11,66 @@ public class Player {
     private Plane[] planes;
     private Plane[] home;
 
+    public Player(int id, String color) {
+        this.id = id;
+        this.color = id; // Assuming color is represented by the player's ID (0-3)
+        this.finishedCount = 0;
+        this.planes = new Plane[4]; // Each player has 4 planes
+        this.home = new Plane[4]; // Each player has a home base of 4 planes
+    }
+
+    /**
+     * Gets the player's ID.
+     * @return the player's ID
+     */
     public int getID() {
         return this.id;
     }
 
-    public Plane[] gethome() {
+    /**
+     * Gets the player's base of four planes.
+     * @return the player's home
+     */
+    public Plane[] getHome() {
         return this.home;
     }
 
-    public void sethome(Plane[] home) {
+    /**
+     * Sets the player's home.
+     * @param home the player's home
+     */
+    public void setHome(Plane[] home) {
         this.home = home;
     }
 
+    /**
+     * Gets the player's color in string format.
+     * @return the player's color
+     */
     public int getColor() {
         return this.color;
     }
 
+    /**
+     * Gets the player's planes.
+     * @return the player's planes
+     */
     public Plane[] getPlanes() {
         return this.planes;
     }
 
+    /**
+     * Sets the player's number of finished planes.
+     * @param finishedCount the player's finished count
+     */
     public void setFinishedCount(int finishedCount) {
         this.finishedCount = finishedCount;
     }
 
+    /**
+     * Gets the player's number of finished planes.
+     * @return the player's finished count
+     */
     public int getFinishedCount() {
         return this.finishedCount;
     }

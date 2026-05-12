@@ -127,6 +127,7 @@ public class Game {
                 newPlaneId++;
             }
             players[i].setPlanes(tempListOfPlanes);
+            players[i].setHome(tempListOfPlanes);
         }
     }
 

@@ -224,7 +224,7 @@ public class Game {
      * @return the player's color, or null if the player is not found
      */
     public String getColorById(int id) {
-        if (getPlayerById(id).getColor() == null) { // Avoid null pointer exception
+        if (getPlayerById(id) == null) { // Avoid null pointer exception
             return null;
         } else {
             return getPlayerById(id).getColor();

@@ -80,6 +80,7 @@ public class Game {
 
     /** Initializes the planes for each player by creating Plane objects and assigning them to the respective players. */
     private void initPlanes() {
+        this.planes = new Plane[NUM_PLAYERS*4]; // Reset the planes list to ensure it is empty before adding new planes
         int newPlaneId = 0; // To assign a unique ID to each plane, which corresponds to its index in the global planes list
         for (int i = 0; i < players.length; i++) { // i is the index of the player in the players list
             Plane[] tempListOfPlanes = new Plane[4]; // Create a temporal list to storage newly created planes
@@ -104,7 +105,6 @@ public class Game {
      */
     public Game() {
         initMap();
-        planes = new Plane[NUM_PLAYERS*4]; // Each player has 4 planes
         initPlayers();
         initPlanes();
         turnCount = 0;

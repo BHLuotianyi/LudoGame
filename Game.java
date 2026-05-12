@@ -112,6 +112,18 @@ public class Game {
 
     /** Public methods */
 
+    public void movePlane(Plane plane, int steps) { // TODO: WIP!
+        if (!plane.getIsMoving()) {
+            map[plane.getPos()].removePlane(plane); // Remove the plane from its current block
+            plane.setIsMoving(true);
+        }
+        plane.setPos(plane.getHeadingBlock());
+        if ((map[plane.getPos()] instanceof EntryBlock) && (map[plane.getPos()].getColor().equals(plane.getColor()))) {
+            plane.setHeadingBlock(((EntryBlock)map[plane.getPos()]).getLeadsToIndex());
+        }
+    }
+
+
     public void sendPlaneHome(Plane plane) {
         int currPos = plane.getPos();
         plane.setIsAtHome(true);

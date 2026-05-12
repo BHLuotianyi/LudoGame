@@ -8,6 +8,7 @@
  */
 public abstract class Plane {
     // Instance variables
+    private boolean ifWin; // Used to track if the plane has reached the end
     private int pos;
     private String color;
     private int level;
@@ -15,6 +16,9 @@ public abstract class Plane {
     private Player owner;
     private String name;
     private int id;
+    private boolean isMoving;
+    private int headingBlock; // The index of the block that the plane is heading to (going to move to in next step)
+    private boolean ifMovedThisTurn; // Used to track if the plane has already moved in the current turn, to prevent multiple moves in one turn
 
     // --- Constructor & Accessors/Mutators
 
@@ -28,7 +32,24 @@ public abstract class Plane {
         this.color = color;
         this.name = name;
         this.isAtHome = true; // Planes start at home by default
+        this.isMoving = false;
+        this.ifWin = false;
         this.pos = -1; // Position is set to -1 when the plane is at home, and will be updated to the index of the map block when it moves out of home
+    }
+
+    /**
+     * Marks the plane as having won the game.
+     */
+    public void win() {
+        this.ifWin = true;
+        this.owner.setFinishedCount(this.owner.getFinishedCount() + 1);
+    }
+
+    /** Gets whether the plane has reached the end.
+     * @return true if the plane has won, false otherwise
+     */
+    public boolean getIfWin() {
+        return this.ifWin;
     }
 
     /**
@@ -93,5 +114,58 @@ public abstract class Plane {
      */
     public int getLevel(){
         return this.level;
+    }
+
+    /**
+     * Gets the plane's color.
+     * @return the plane's color in string format (e.g. "RED", "BLUE", etc.)
+     */
+    public String getColor() {
+        return this.color;
+    }
+
+    /** Gets whether the plane has moved in the current turn.
+     * @return true if the plane has moved this turn, false otherwise
+     */
+    public boolean getIfMovedThisTurn() {
+        return this.ifMovedThisTurn;
+    }
+
+    /**
+     * Sets whether the plane has moved in the current turn.
+     * @param whetherMovedThisTurn true if the plane has moved this turn, false otherwise
+     */
+    public void setIfMovedThisTurn(boolean whetherMovedThisTurn) {
+        this.ifMovedThisTurn = whetherMovedThisTurn;
+    }
+
+    /** Gets whether the plane is currently moving.
+     * @return true if the plane is moving, false otherwise
+     */
+    public boolean getIsMoving() {
+        return this.isMoving;
+    }
+
+    /** Sets whether the plane is currently moving.
+     * @param isMoving true if the plane is moving, false otherwise
+     */
+    public void setIsMoving(boolean isMoving) {
+            this.isMoving = isMoving;
+    }
+
+    /**
+     * Gets the index of the block that the plane is heading to.
+     * @return the index of the next block
+     */
+    public int getHeadingBlock() {
+        return this.headingBlock;
+    }
+
+    /**
+     * Sets the index of the block that the plane is heading to.
+     * @param headingBlock the index of the next block
+     */
+    public void setHeadingBlock(int headingBlock) {
+        this.headingBlock = headingBlock;
     }
 }

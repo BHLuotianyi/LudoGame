@@ -3,7 +3,7 @@
  * Represents a high-level plane in the Ludo game.
  */
 public class CommanderPlane extends Plane {
-    public CommanderPlane(Player owner, int id) {
-        super(owner, 2, id);
+    public CommanderPlane(Player owner, int id, String name) {
+        super(owner, 2, id, name);
     }
 }

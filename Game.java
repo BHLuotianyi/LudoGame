@@ -153,7 +153,8 @@ public class Game {
      * @param steps the number of blocks to advance
      * @param ifJump whether this movement was caused by a jump
      */
-    public void movePlane(Plane plane, int steps, boolean ifJump) {
+    public void movePlane(Plane plane, int steps, boolean ifJump) { 
+        // TODO: Handle the "takeoff" of planes from home
         if (!plane.getIsMoving()) {
             map[plane.getPos()].removePlane(plane); // Remove the plane from its current block
             plane.setIsMoving(true);
@@ -165,6 +166,8 @@ public class Game {
             plane.setHeadingBlock((plane.getHeadingBlock() + 1 ) % MAIN_LOOP_SIZE);
         }
         steps--;
+
+        // TODO: Handle the final route case (bouncing back & winning the game)
 
         if (steps > 0) {
             movePlane(plane, steps, ifJump); // If there are still steps left to move, recursively call movePlane until the plane has moved the required number of steps

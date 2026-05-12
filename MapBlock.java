@@ -57,10 +57,10 @@ public abstract class MapBlock {
                     if (landingPlanes[i] != null) {
                         game.sendPlaneHome(landingPlanes[i]);
                     }
-                    organizeLandingPlanes();
-                    addPlane(newcomer);
-                    currLandingColor = newcomer.getColor(); // Update the current landing color to the newcomer's color
                 }
+                organizeLandingPlanes();
+                addPlane(newcomer);
+                currLandingColor = newcomer.getColor(); // Update the current landing color to the newcomer's color
             }
         } else {
             // If there are no planes of a different color on the block, simply add the newcomer to the block

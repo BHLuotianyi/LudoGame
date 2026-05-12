@@ -24,7 +24,7 @@ public class MainMapBlock extends MapBlock {
      */
     public void onLanding(Game game, Plane plane, boolean ifJumped) {
         super.onLanding(game, plane, ifJumped);
-        if (!ifJumped && plane.getColor().equals(this.getColor())) {
+        if (!ifJumped && plane.getColor().equals(this.getColor()) && !plane.getIsAtHome()) { // Note: adding the "not at home" condition to prevent planes sent home from triggering the jump logic
             // TODO: Ask the player if they want to jump
             game.movePlane(plane, 4, true);
         }

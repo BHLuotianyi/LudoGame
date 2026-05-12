@@ -7,7 +7,46 @@ public abstract class MapBlock {
     /** Attributes */
     private int id;
     private String color;
-    private Plane[] landingPlanes;
+    private Plane[] landingPlanes; // To keep track of planes currently on this block
+
+    /** Organizes the landing planes array by removing null entries.
+     */
+    private void organizeLandingPlanes() {
+        Plane[] newLandingPlanes = new Plane[landingPlanes.length];
+        int index = 0;
+        for (int i = 0; i < landingPlanes.length; i++) {
+            if (landingPlanes[i] != null) {
+                newLandingPlanes[index] = landingPlanes[i];
+                index++;
+            }
+        }
+        this.landingPlanes = newLandingPlanes;
+    }
+
+    /** Checks for collisions between the newcomer plane and existing planes on the block and handles them according to the game rules.
+     * @param game The game instance
+     * @param newcomer The plane that is trying to land on the block
+     */
+    private void checkCollide(Game game, Plane newcomer) {
+        int maxLevelInBlock = 0;
+        for (int i = 0; i < landingPlanes.length; i++) { // Determine the maximum level of planes currently in the block
+            if (landingPlanes[i] != null) {
+                if (landingPlanes[i].getLevel() > maxLevelInBlock) {
+                    maxLevelInBlock = landingPlanes[i].getLevel();
+                }
+            }
+        }
+        if (newcomer.getLevel() < maxLevelInBlock) {
+            game.sendPlaneHome(newcomer);
+        } else {
+            for (int i = 0; i< landingPlanes.length; i++) {
+                if (landingPlanes[i] != null) {
+                    game.sendPlaneHome(landingPlanes[i]);
+                }
+            }
+        }
+        organizeLandingPlanes();
+    }
 
     /** Constructor 
      * @param id The ID of the block in the map list
@@ -19,6 +58,9 @@ public abstract class MapBlock {
         this.landingPlanes = new Plane[Game.NUM_PLAYERS*4]; // To prevent out of bounds, we can set this to a large number since a block can have multiple planes landing on it
     }
 
+    /** Get the ID of the block.
+     * @return The ID of the block.
+     */
     public int getId() {
         return this.id;
     }

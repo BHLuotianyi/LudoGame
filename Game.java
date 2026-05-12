@@ -20,7 +20,7 @@ public class Game {
     public static final String GREEN = "GREEN";
 
     /** Private variables */
-    private MapBlock[] mapBlockList = new MapBlock[MAIN_LOOP_SIZE + FINAL_ROUTE_LENGTH*4]; // The list to keep track of all the blocks in the game, including the main loop and the final routes for each player
+    private MapBlock[] map = new MapBlock[MAIN_LOOP_SIZE + FINAL_ROUTE_LENGTH*4]; // The list to keep track of all the blocks in the game, including the main loop and the final routes for each player
     private int turnCount; // To keep track of the current turn
 
     private Player[] players;
@@ -35,7 +35,7 @@ public class Game {
 
     /** Initializes the game map by creating the appropriate MapBlock objects for the main loop and final routes. */
     private void initMap() {
-        for (int i = 0; i < mapBlockList.length; i++) {
+        for (int i = 0; i < map.length; i++) {
             String color = "";
 
             if ((i < MAIN_LOOP_SIZE) && (i % 4 == 0)) { // Handle the main loop blocks' colors
@@ -58,13 +58,13 @@ public class Game {
 
             // Create the appropriate MapBlock object based on the index and color
             if ((i < MAIN_LOOP_SIZE) && (i % 13 == 0)) {
-                mapBlockList[i] = new EntryBlock(i, color);
+                map[i] = new EntryBlock(i, color);
             } else if ((i < MAIN_LOOP_SIZE) && (i % 7 == 0)) {
-                mapBlockList[i] = new ShortCutBlock(i, color);
+                map[i] = new ShortCutBlock(i, color);
             } else if (i < MAIN_LOOP_SIZE) {
-                mapBlockList[i] = new MainMapBlock(i, color);
+                map[i] = new MainMapBlock(i, color);
             } else if (i >= MAIN_LOOP_SIZE) {
-                mapBlockList[i] = new FinalRouteBlock(i, color);
+                map[i] = new FinalRouteBlock(i, color);
             }
         }
     }
@@ -103,7 +103,7 @@ public class Game {
      * CONSTRUCTOR
      * Initializes the game by setting up the map and players, and resetting the turn count.
      */
-    public Game() {
+    private Game() {
         initMap();
         initPlayers();
         initPlanes();
@@ -115,7 +115,7 @@ public class Game {
     public void sendPlaneHome(Plane plane) {
         int currPos = plane.getPos();
         plane.setIsAtHome(true);
-        mapBlockList[currPos].removePlane(plane); // Remove the plane from the block it is currently on
+        map[currPos].removePlane(plane); // Remove the plane from the block it is currently on
         plane.setPos(-1);
     }
 
@@ -177,7 +177,7 @@ public class Game {
      * @return The array of all map blocks (main loop + final routes).
      */
     public MapBlock[] getMap() {
-        return this.mapBlockList;
+        return map;
     }
 
     /**

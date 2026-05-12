@@ -78,4 +78,20 @@ public abstract class Plane {
     public void setIsAtHome(boolean isAtHome) {
         this.isAtHome = isAtHome;
     }
+
+    /**
+     * Gets whether the plane is at home or not.
+     * @return true if the plane is at home, false otherwise
+     */
+    public boolean getIsAtHome() {
+        return this.isAtHome;
+    }
+
+    /**
+     * Gets the plane's level.
+     * @return the plane's level
+     */
+    public int getLevel(){
+        return this.level;
+    }
 }

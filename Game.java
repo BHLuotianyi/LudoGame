@@ -69,14 +69,24 @@ public class Game {
         }
     }
 
+    /** Initializes the players by creating Player objects for each player and assigning them their respective colors. */
+    private void initPlayers() {
+        players[0] = new Player(0, RED);
+        players[1] = new Player(1, BLUE);
+        players[2] = new Player(2, YELLOW);
+        players[3] = new Player(3, GREEN);
+    }
+
 
     /**
-     * Constructs a new Game object.
+     * CONSTRUCTOR
+     * Initializes the game by setting up the map and players, and resetting the turn count.
      */
     public Game() {
         initMap();
         players = new Player[NUM_PLAYERS];
         planes = new Plane[NUM_PLAYERS*4]; // Each player has 4 planes
+        initPlayers();
         turnCount = 0;
     }
 

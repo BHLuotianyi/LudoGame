@@ -1,39 +1,66 @@
-/** 
- * Game.java
- * The main class to run the Ludo game
+/**
+ * Coordinates the shared state and movement rules for a Ludo game.
+ *
+ * The game owns the board, players, and planes. It is responsible for
+ * building the board layout, advancing planes one block at a time, applying
+ * landing effects, and exposing the current game state to callers.
  */
 public class Game {
 
-    /** Global variables */
-    public static final int MAIN_LOOP_SIZE = 52; // Standard Ludo board has 52 blocks in the main loop
-    public static final int FINAL_ROUTE_LENGTH = 6; // This does not include the entry block, which is the first block of the final route
-    public static final int RED_ENTRY_INDEX = MAIN_LOOP_SIZE; // The index of the blue entry block in the mapBlockList
-    public static final int BLUE_ENTRY_INDEX = MAIN_LOOP_SIZE + FINAL_ROUTE_LENGTH; // The index of the red entry block in the mapBlockList
-    public static final int YELLOW_ENTRY_INDEX = MAIN_LOOP_SIZE + FINAL_ROUTE_LENGTH*2; // The index of the green entry block in the mapBlockList
-    public static final int GREEN_ENTRY_INDEX = MAIN_LOOP_SIZE + FINAL_ROUTE_LENGTH*3; // The index of the yellow entry block in the mapBlockList
+    /** Number of blocks in the standard Ludo main loop. */
+    public static final int MAIN_LOOP_SIZE = 52;
+
+    /** Number of final-route blocks for each player. */
+    public static final int FINAL_ROUTE_LENGTH = 6;
+
+    /** First red final-route block index in the board array. */
+    public static final int RED_ENTRY_INDEX = MAIN_LOOP_SIZE;
+
+    /** First blue final-route block index in the board array. */
+    public static final int BLUE_ENTRY_INDEX = MAIN_LOOP_SIZE + FINAL_ROUTE_LENGTH;
+
+    /** First yellow final-route block index in the board array. */
+    public static final int YELLOW_ENTRY_INDEX = MAIN_LOOP_SIZE + FINAL_ROUTE_LENGTH*2;
+
+    /** First green final-route block index in the board array. */
+    public static final int GREEN_ENTRY_INDEX = MAIN_LOOP_SIZE + FINAL_ROUTE_LENGTH*3;
     
+    /** Number of players in the game. */
     public static final int NUM_PLAYERS = 4;
 
+    /** Color name for the red player and red board spaces. */
     public static final String RED = "RED";
+
+    /** Color name for the blue player and blue board spaces. */
     public static final String BLUE = "BLUE";
+
+    /** Color name for the yellow player and yellow board spaces. */
     public static final String YELLOW = "YELLOW";
+
+    /** Color name for the green player and green board spaces. */
     public static final String GREEN = "GREEN";
 
-    /** Private variables */
-    private MapBlock[] map = new MapBlock[MAIN_LOOP_SIZE + FINAL_ROUTE_LENGTH*4]; // The list to keep track of all the blocks in the game, including the main loop and the final routes for each player
-    private int turnCount; // To keep track of the current turn
+    /** Complete board array containing the main loop and all final routes. */
+    private MapBlock[] map = new MapBlock[MAIN_LOOP_SIZE + FINAL_ROUTE_LENGTH*4];
 
+    /** Number of turns that have been played. */
+    private int turnCount;
+
+    /** Players participating in the game. */
     private Player[] players;
-    private Player currPlayer; // To keep track of the current player
 
-    private Plane[] planes; // To keep track of the planes in the game
+    /** Player whose turn is currently active. */
+    private Player currPlayer;
 
+    /** Global list of every plane in the game. */
+    private Plane[] planes;
 
-    private boolean isGameOver = false; // To indicate if the game is over
+    /** Whether the game has ended. */
+    private boolean isGameOver = false;
 
-    /** Helper methods */
-
-    /** Initializes the game map by creating the appropriate MapBlock objects for the main loop and final routes. */
+    /**
+     * Creates the main loop and each player's final route.
+     */
     private void initMap() {
         for (int i = 0; i < map.length; i++) {
             String color = "";
@@ -69,7 +96,9 @@ public class Game {
         }
     }
 
-    /** Initializes the players by creating Player objects for each player and assigning them their respective colors. */
+    /**
+     * Creates the four players and assigns their colors.
+     */
     private void initPlayers() {
         players = new Player[4];
         players[0] = new Player(0, RED);
@@ -78,7 +107,10 @@ public class Game {
         players[3] = new Player(3, GREEN);
     }
 
-    /** Initializes the planes for each player by creating Plane objects and assigning them to the respective players. */
+    /**
+     * Creates each player's planes and stores them in both the global plane list
+     * and the owning player's plane list.
+     */
     private void initPlanes() {
         this.planes = new Plane[NUM_PLAYERS*4]; // Reset the planes list to ensure it is empty before adding new planes
         int newPlaneId = 0; // To assign a unique ID to each plane, which corresponds to its index in the global planes list
@@ -100,8 +132,8 @@ public class Game {
 
 
     /**
-     * CONSTRUCTOR
-     * Initializes the game by setting up the map and players, and resetting the turn count.
+     * Initializes a new game with a fresh board, player list, plane list, and
+     * turn counter.
      */
     private Game() {
         initMap();
@@ -110,8 +142,17 @@ public class Game {
         turnCount = 0;
     }
 
-    /** Public methods */
-
+    /**
+     * Moves a plane forward by the requested number of steps.
+     *
+     * The method advances recursively so each step can update the plane's
+     * current and next block. After the final step, the destination block's
+     * landing behavior is applied.
+     *
+     * @param plane the plane to move
+     * @param steps the number of blocks to advance
+     * @param ifJump whether this movement was caused by a jump
+     */
     public void movePlane(Plane plane, int steps, boolean ifJump) {
         if (!plane.getIsMoving()) {
             map[plane.getPos()].removePlane(plane); // Remove the plane from its current block
@@ -133,7 +174,11 @@ public class Game {
         }
     }
 
-
+    /**
+     * Sends a plane back to its home area and removes it from its current block.
+     *
+     * @param plane the plane to send home
+     */
     public void sendPlaneHome(Plane plane) {
         int currPos = plane.getPos();
         plane.setIsAtHome(true);
@@ -142,17 +187,19 @@ public class Game {
     }
 
     /**
-     * Checks if the game is over by determining if any player has all their planes in the final route.
-     * @return true if the game is over, false otherwise
+     * Reports whether the game has ended.
+     *
+     * @return true if the game is over; false otherwise
      */
     public boolean getIfGameOver() {
         return isGameOver;
     }
 
     /**
-     * Searches for a player by their ID in the players array.
-     * @param targetId the ID of the player to search for
-     * @return the player with the specified ID, or null if not found
+     * Finds a player by ID.
+     *
+     * @param targetId the ID of the player to find
+     * @return the matching player, or null if no player has that ID
      */
     public Player getPlayerById(int targetId) {
         if (players == null) { // Defensive programming in case the players array has not been initialized
@@ -167,9 +214,10 @@ public class Game {
     }
 
     /**
-     * Gets the color of a player by their ID.
+     * Gets the color assigned to a player.
+     *
      * @param id the ID of the player
-     * @return the color of the player, or null if the player is not found
+     * @return the player's color, or null if the player is not found
      */
     public String getColorById(int id) {
         String result = getPlayerById(id).getColor();
@@ -180,9 +228,10 @@ public class Game {
     }
 
     /**
-     * Gets a plane by its name.
-     * @param name the name of the plane to search for
-     * @return the plane with the specified name, or null if not found
+     * Finds a plane by display name.
+     *
+     * @param name the plane name to find, such as "R0"
+     * @return the matching plane, or null if no plane has that name
      */
     public Plane getPlaneByName(String name) {
         if (planes == null) { // Defensive programming in case the planes array has not been initialized
@@ -196,35 +245,45 @@ public class Game {
         return null;
     }
     /**
-     * @return The array of all map blocks (main loop + final routes).
+     * Gets the complete board.
+     *
+     * @return the array of all main-loop and final-route blocks
      */
     public MapBlock[] getMap() {
         return map;
     }
 
     /**
-     * @return The total number of turns played so far.
+     * Gets the number of turns played so far.
+     *
+     * @return the current turn count
      */
     public int getTurnCount() {
         return this.turnCount;
     }
 
     /**
-     * @return The player whose turn it is currently.
+     * Gets the player whose turn is active.
+     *
+     * @return the current player
      */
     public Player getCurrPlayer() {
         return this.currPlayer;
     }
 
     /**
-     * @return The array of all players in the game.
+     * Gets all players.
+     *
+     * @return the player array
      */
     public Player[] getPlayers() {
         return this.players;
     }
 
     /**
-     * @return The array of all planes in the game.
+     * Gets all planes.
+     *
+     * @return the global plane array
      */
     public Plane[] getPlanes() {
         return this.planes;

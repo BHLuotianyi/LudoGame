@@ -1,9 +1,17 @@
-/** 
- * EntryBlock.java
- * Represents an entry block on the Ludo game map, which allows a player to enter their piece onto the main loop.
+/**
+ * Main-loop block that leads a matching-color plane into its final route.
  */
 public class EntryBlock extends MapBlock {
-    private int leadsToIndex; // The index of the block in final route that this entry block leads to
+    /** Index of the first final-route block reached from this entry block. */
+    private int leadsToIndex;
+
+    /**
+     * Creates an entry block and maps it to the first final-route block for its
+     * color.
+     *
+     * @param id the block's index in the game map
+     * @param color the block color
+     */
     public EntryBlock(int id, String color) {
         super(id, color);
         switch(color) {
@@ -22,6 +30,11 @@ public class EntryBlock extends MapBlock {
         }
     }
 
+    /**
+     * Gets the first final-route block reached from this entry block.
+     *
+     * @return the destination final-route index
+     */
     public int getLeadsToIndex() {
         return leadsToIndex;
     }

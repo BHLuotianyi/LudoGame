@@ -1,29 +1,49 @@
-/** 
- * Plane.java
- * An abstract class representing a plane in the Ludo game. This class will be extended by specific types of planes such as FighterPlane and CommanderPlane.
- */
 /**
- * Abstract Plane class for the Ludo CCT project.
- * Contains the green-colored Constructor, Getters, and Setters.
+ * Base class for all movable planes in the Ludo game.
+ *
+ * A plane tracks its owner, strength level, board position, next heading
+ * block, and movement state. Concrete subclasses define the level used when
+ * resolving collisions.
  */
 public abstract class Plane {
-    // Instance variables
-    private boolean ifWin; // Used to track if the plane has reached the end
-    private int pos;
-    private String color;
-    private int level;
-    private boolean isAtHome;
-    private Player owner;
-    private String name;
-    private int id;
-    private boolean isMoving;
-    private int headingBlock; // The index of the block that the plane is heading to (going to move to in next step)
-    private boolean ifMovedThisTurn; // Used to track if the plane has already moved in the current turn, to prevent multiple moves in one turn
+    /** Whether this plane has reached the finish. */
+    private boolean ifWin;
 
-    // --- Constructor & Accessors/Mutators
+    /** Current map index, or -1 when the plane is at home. */
+    private int pos;
+
+    /** Color of the plane and its owner. */
+    private String color;
+
+    /** Collision strength level for this plane. */
+    private int level;
+
+    /** Whether this plane is currently in its home area. */
+    private boolean isAtHome;
+
+    /** Player who owns this plane. */
+    private Player owner;
+
+    /** Short display name of the plane. */
+    private String name;
+
+    /** Unique ID in the global plane list. */
+    private int id;
+
+    /** Whether this plane is currently in a movement sequence. */
+    private boolean isMoving;
+
+    /** Map index of the next block this plane will enter. */
+    private int headingBlock;
 
     /**
-     * Constructor for the Plane object.
+     * Creates a plane owned by a player.
+     *
+     * @param owner the player who owns this plane
+     * @param level the plane's collision strength level
+     * @param id the plane's unique ID in the global plane list
+     * @param color the plane's player color
+     * @param name the short display name of the plane
      */
     public Plane(Player owner, int level, int id, String color, String name) {
         this.owner = owner;
@@ -38,38 +58,43 @@ public abstract class Plane {
     }
 
     /**
-     * Marks the plane as having won the game.
+     * Marks this plane as finished and increments its owner's finished-plane count.
      */
     public void win() {
         this.ifWin = true;
         this.owner.setFinishedCount(this.owner.getFinishedCount() + 1);
     }
 
-    /** Gets whether the plane has reached the end.
-     * @return true if the plane has won, false otherwise
+    /**
+     * Reports whether the plane has reached the finish.
+     *
+     * @return true if the plane has finished; false otherwise
      */
     public boolean getIfWin() {
         return this.ifWin;
     }
 
     /**
-     * Gets the plane's position (index in the map array).
-     * @return the plane's position
+     * Gets the plane's current board position.
+     *
+     * @return the map index, or -1 when the plane is at home
      */
     public int getPos() {
         return this.pos;
     }
 
     /**
-     * Sets the plane's position (index in the map array).
-     * @param index the new position of the plane
+     * Sets the plane's current board position.
+     *
+     * @param index the new map index, or -1 when the plane is at home
      */
     public void setPos(int index) {
         this.pos = index;
     }
 
     /**
-     * Gets the plane's owner player.
+     * Gets the player who owns the plane.
+     *
      * @return the plane's owner
      */
     public Player getOwner() {
@@ -77,40 +102,45 @@ public abstract class Plane {
     }
 
     /**
-     * Gets the plane's ID.
-     * @return the plane's ID
+     * Gets the plane's unique ID in the global plane list.
+     *
+     * @return the plane ID
      */
     public int getId() {
         return this.id;
     }
 
     /**
-     * Gets the plane's name.
-     * @return the plane's name in string format (e.g. "G1", "R2", etc.)
+     * Gets the plane's short display name.
+     *
+     * @return the plane name, such as "G1" or "R2"
      */
     public String getName() {
         return this.name;
     }
 
     /**
-     * Sets if the plane is at home or not.
-     * @param isAtHome boolean value indicating if the plane is at home (true) or not (false)
+     * Sets whether the plane is in its home area.
+     *
+     * @param isAtHome true if the plane is at home; false otherwise
      */
     public void setIsAtHome(boolean isAtHome) {
         this.isAtHome = isAtHome;
     }
 
     /**
-     * Gets whether the plane is at home or not.
-     * @return true if the plane is at home, false otherwise
+     * Reports whether the plane is in its home area.
+     *
+     * @return true if the plane is at home; false otherwise
      */
     public boolean getIsAtHome() {
         return this.isAtHome;
     }
 
     /**
-     * Gets the plane's level.
-     * @return the plane's level
+     * Gets the plane's collision strength level.
+     *
+     * @return the plane level
      */
     public int getLevel(){
         return this.level;
@@ -118,52 +148,44 @@ public abstract class Plane {
 
     /**
      * Gets the plane's color.
-     * @return the plane's color in string format (e.g. "RED", "BLUE", etc.)
+     *
+     * @return the plane color, such as "RED" or "BLUE"
      */
     public String getColor() {
         return this.color;
     }
 
-    /** Gets whether the plane has moved in the current turn.
-     * @return true if the plane has moved this turn, false otherwise
-     */
-    public boolean getIfMovedThisTurn() {
-        return this.ifMovedThisTurn;
-    }
-
     /**
-     * Sets whether the plane has moved in the current turn.
-     * @param whetherMovedThisTurn true if the plane has moved this turn, false otherwise
-     */
-    public void setIfMovedThisTurn(boolean whetherMovedThisTurn) {
-        this.ifMovedThisTurn = whetherMovedThisTurn;
-    }
-
-    /** Gets whether the plane is currently moving.
-     * @return true if the plane is moving, false otherwise
+     * Reports whether the plane is currently in the middle of a movement sequence.
+     *
+     * @return true if the plane is moving; false otherwise
      */
     public boolean getIsMoving() {
         return this.isMoving;
     }
 
-    /** Sets whether the plane is currently moving.
-     * @param isMoving true if the plane is moving, false otherwise
+    /**
+     * Sets whether the plane is currently in the middle of a movement sequence.
+     *
+     * @param isMoving true if the plane is moving; false otherwise
      */
     public void setIsMoving(boolean isMoving) {
             this.isMoving = isMoving;
     }
 
     /**
-     * Gets the index of the block that the plane is heading to.
-     * @return the index of the next block
+     * Gets the next block the plane will enter.
+     *
+     * @return the map index of the next block
      */
     public int getHeadingBlock() {
         return this.headingBlock;
     }
 
     /**
-     * Sets the index of the block that the plane is heading to.
-     * @param headingBlock the index of the next block
+     * Sets the next block the plane will enter.
+     *
+     * @param headingBlock the map index of the next block
      */
     public void setHeadingBlock(int headingBlock) {
         this.headingBlock = headingBlock;

@@ -1,8 +1,18 @@
-/** 
- * Main.java
- * The entry point of the Ludo game application. This class contains the main method which initializes and starts the game.
+/**
+ * Application entry point for the Ludo game.
  */
 class Main {
+    /**
+     * Prevents creating instances of this utility entry-point class.
+     */
+    private Main() {
+    }
+
+    /**
+     * Starts the application.
+     *
+     * @param args command-line arguments
+     */
     public static void main(String[] args) {
         // Sample comment
         // d

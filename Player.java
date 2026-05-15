@@ -24,18 +24,23 @@ public class Player {
     /** One-letter prefix used in plane display names. */
     private String shortName;
 
+    /** The index of the block where the player's planes start. */
+    private int startingBlockIndex;
+
     /**
      * Creates a player with an ID and color.
      *
      * @param id the player's ID
      * @param color the player's color
+     * @param startingBlockIndex the index of the block where the player's planes start
      */
-    public Player(int id, String color) {
+    public Player(int id, String color, int startingBlockIndex) {
         this.id = id;
         this.color = color; // Assuming color is represented by the player's ID (0-3)
         this.finishedCount = 0;
         this.planes = new Plane[4]; // Each player has 4 planes
         this.home = new Plane[4]; // Each player has a home base of 4 planes
+        this.startingBlockIndex = startingBlockIndex;
         this.shortName = color.substring(0,1); // Short name for display purposes (e.g., "R" for Red)
     }
 
@@ -118,5 +123,14 @@ public class Player {
      */
     public String getShortName() {
         return this.shortName;
+    }
+
+    /**
+     * Gets the index of the block where the player's planes start.
+     *
+     * @return the starting block index
+     */
+    public int getStartingBlockIndex() {
+        return this.startingBlockIndex;
     }
 }

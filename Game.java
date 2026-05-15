@@ -101,10 +101,10 @@ public class Game {
      */
     private void initPlayers() {
         players = new Player[4];
-        players[0] = new Player(0, RED);
-        players[1] = new Player(1, BLUE);
-        players[2] = new Player(2, YELLOW);
-        players[3] = new Player(3, GREEN);
+        players[0] = new Player(0, RED, 3);
+        players[1] = new Player(1, BLUE, 16);
+        players[2] = new Player(2, YELLOW, 29);
+        players[3] = new Player(3, GREEN, 42);
     }
 
     /**

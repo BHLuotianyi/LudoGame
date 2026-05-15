@@ -3,12 +3,6 @@
  */
 class Main {
     /**
-     * Prevents creating instances of this utility entry-point class.
-     */
-    private Main() {
-    }
-
-    /**
      * Starts the application.
      *
      * @param args command-line arguments

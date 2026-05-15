@@ -144,6 +144,17 @@ public class Game {
     }
 
     /**
+     * Takes a plane off the home base and places it on the starting block.
+     *
+     * @param plane the plane to take off
+     */
+    public void takeoffPlane(Plane plane) {
+        plane.setIsAtHome(false);
+        plane.setPos(plane.getOwner().getStartingBlockIndex());
+        map[plane.getPos()].onLanding(this, plane, false);
+    }
+
+    /**
      * Moves a plane forward by the requested number of steps.
      *
      * The method advances recursively so each step can update the plane's
@@ -188,6 +199,7 @@ public class Game {
         plane.setIsAtHome(true);
         map[currPos].removePlane(plane); // Remove the plane from the block it is currently on
         plane.setPos(-1);
+        plane.getOwner().addPlaneToHome(plane);
     }
 
     /**

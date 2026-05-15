@@ -45,6 +45,34 @@ public class Player {
     }
 
     /**
+     * Adds a plane to the player's home area.
+     *
+     * @param plane the plane to add to the home area
+     */
+    public void addPlaneToHome(Plane plane) {
+        for (int i = 0; i < home.length; i++) {
+            if (home[i] == null) {
+                home[i] = plane;
+                break;
+            }
+        }
+    }
+
+    /**
+     * Removes a plane from the player's home area.
+     *
+     * @param plane the plane to remove from the home area
+     */
+    public void removePlaneFromHome(Plane plane) {
+        for (int i = 0; i < home.length; i++) {
+            if (home[i] == plane) {
+                home[i] = null;
+                break;
+            }
+        }
+    }
+
+    /**
      * Gets the player's ID.
      *
      * @return the player's ID

@@ -33,4 +33,17 @@ public class EntryBlock extends MapBlock {
     public int getLeadsToIndex() {
         return leadsToIndex;
     }
+
+    /**
+     * Stops the plane from reversing when it passes through this block.
+     *
+     * @param game the current game
+     * @param plane the plane that passes through this block
+     */
+    public void onPassing(Game game, Plane plane) {
+        super.onPassing(game, plane);
+        if (plane.getIsReversing()) {
+            plane.setIsReversing(false);
+        }
+    }
 }

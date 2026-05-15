@@ -94,6 +94,14 @@ public abstract class MapBlock {
     }
 
     /**
+     * Applies the default passing behavior for this block. Do nothing by default, but can be overridden by subclasses.
+     *
+     * @param game the current game
+     * @param plane the plane that passed over this block
+     */
+    public void onPassing(Game game, Plane plane) {} // Do nothing by default
+
+    /**
      * Gets this block's map index.
      *
      * @return the block ID

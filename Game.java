@@ -24,6 +24,18 @@ public class Game {
 
     /** First green final-route block index in the board array. */
     public static final int GREEN_ENTRY_INDEX = MAIN_LOOP_SIZE + FINAL_ROUTE_LENGTH*3;
+
+    /** Red final destination block index in the board array. */
+    public static final int RED_FINAL_INDEX = RED_ENTRY_INDEX + FINAL_ROUTE_LENGTH - 1;
+
+    /** Blue final destination block index in the board array. */
+    public static final int BLUE_FINAL_INDEX = BLUE_ENTRY_INDEX + FINAL_ROUTE_LENGTH - 1;
+
+    /** Yellow final destination block index in the board array. */
+    public static final int YELLOW_FINAL_INDEX = YELLOW_ENTRY_INDEX + FINAL_ROUTE_LENGTH - 1;
+
+    /** Green final destination block index in the board array. */
+    public static final int GREEN_FINAL_INDEX = GREEN_ENTRY_INDEX + FINAL_ROUTE_LENGTH - 1;
     
     /** Number of players in the game. */
     public static final int NUM_PLAYERS = 4;
@@ -84,13 +96,17 @@ public class Game {
             }
 
             // Create the appropriate MapBlock object based on the index and color
+            boolean isFinalDestination = (i == RED_FINAL_INDEX) || (i == BLUE_FINAL_INDEX) || (i == YELLOW_FINAL_INDEX) || (i == GREEN_FINAL_INDEX);
+
             if ((i < MAIN_LOOP_SIZE) && (i % 13 == 0)) {
                 map[i] = new EntryBlock(i, color);
             } else if ((i < MAIN_LOOP_SIZE) && (i % 7 == 0)) {
                 map[i] = new ShortCutBlock(i, color);
             } else if (i < MAIN_LOOP_SIZE) {
                 map[i] = new MainMapBlock(i, color);
-            } else if (i >= MAIN_LOOP_SIZE) {
+            } else if (isFinalDestination) {
+                map[i] = new FinalBlock(i, color);
+            } else if ((i >= MAIN_LOOP_SIZE) && !isFinalDestination) {
                 map[i] = new FinalRouteBlock(i, color);
             }
         }
@@ -174,22 +190,26 @@ public class Game {
      * @param ifJump whether this movement was caused by a jump
      */
     public void movePlane(Plane plane, int steps, boolean ifJump) { 
-        // TODO: Handle the "takeoff" of planes from home
+
         if (!plane.getIsMoving()) {
             map[plane.getPos()].removePlane(plane); // Remove the plane from its current block
             plane.setIsMoving(true);
         }
         plane.setPos(plane.getHeadingBlock());
+
         if ((map[plane.getPos()] instanceof EntryBlock) && (map[plane.getPos()].getColor().equals(plane.getColor()))) {
             plane.setHeadingBlock(((EntryBlock)map[plane.getPos()]).getLeadsToIndex());
+        } else if (map[plane.getPos()] instanceof FinalRouteBlock && !plane.getIsReversing()) {
+            plane.setHeadingBlock(plane.getHeadingBlock() + 1);
+        } else if (map[plane.getPos()] instanceof FinalRouteBlock && plane.getIsReversing()) {
+            plane.setHeadingBlock(plane.getHeadingBlock() - 1);
         } else {
             plane.setHeadingBlock((plane.getHeadingBlock() + 1 ) % MAIN_LOOP_SIZE);
         }
         steps--;
 
-        // TODO: Handle the final route case (bouncing back & winning the game)
-
         if (steps > 0) {
+            map[plane.getPos()].onPassing(this, plane); // Trigger the onPassing event for the block that the plane is passing through
             movePlane(plane, steps, ifJump); // If there are still steps left to move, recursively call movePlane until the plane has moved the required number of steps
         } else {
             plane.setIsMoving(false);

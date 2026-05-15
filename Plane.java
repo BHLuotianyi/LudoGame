@@ -36,6 +36,9 @@ public abstract class Plane {
     /** Map index of the next block this plane will enter. */
     private int headingBlock;
 
+    /** Whether this plane is currently moving in reverse. */
+    private boolean isReversing;
+
     /**
      * Creates a plane owned by a player.
      *
@@ -189,5 +192,23 @@ public abstract class Plane {
      */
     public void setHeadingBlock(int headingBlock) {
         this.headingBlock = headingBlock;
+    }
+
+    /**
+     * Gets whether the plane is currently moving in reverse.
+     *
+     * @return true if the plane is moving in reverse; false otherwise
+     */
+    public boolean getIsReversing() {
+        return this.isReversing;
+    }
+
+    /**
+     * Sets whether the plane is currently moving in reverse.
+     *
+     * @param isReversing true if the plane is moving in reverse; false otherwise
+     */
+    public void setIsReversing(boolean isReversing) {
+        this.isReversing = isReversing;
     }
 }

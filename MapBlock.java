@@ -87,7 +87,9 @@ public abstract class MapBlock {
      *
      * @param game the current game
      * @param plane the plane that landed on this block
-     * @param ifJumped whether the plane arrived as part of a jump
+     * @param ifJumped true if the plane arrived here as part of a special 
+     *                 movement (like a jump or shortcut). Used to prevent 
+     *                 infinite loops or excessive chaining of effects.
      */
     public void onLanding(Game game, Plane plane, boolean ifJumped) {
         handleTraffic(game, plane);

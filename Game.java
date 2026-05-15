@@ -233,7 +233,10 @@ public class Game {
      *
      * @param plane the plane to move
      * @param steps the number of blocks to advance
-     * @param ifJump whether this movement was caused by a jump
+     * @param ifJump whether this movement sequence was initiated by a special 
+     *               effect (jump or shortcut). This flag is passed to onLanding 
+     *               at the destination to prevent infinite chains of special 
+     *               movements.
      */
     public void movePlane(Plane plane, int steps, boolean ifJump) {
         if (!plane.getIsMoving()) { // Adds a flag when the plane starts moving

@@ -14,19 +14,14 @@ public class EntryBlock extends MapBlock {
      */
     public EntryBlock(int id, String color) {
         super(id, color);
-        switch(color) {
-            case Game.RED:
-                leadsToIndex = Game.RED_ENTRY_INDEX;
-                break;
-            case Game.BLUE:
-                leadsToIndex = Game.BLUE_ENTRY_INDEX;
-                break;
-            case Game.YELLOW:
-                leadsToIndex = Game.YELLOW_ENTRY_INDEX;
-                break;
-            case Game.GREEN:
-                leadsToIndex = Game.GREEN_ENTRY_INDEX;
-                break;
+        if (color.equals(Game.RED)) {
+            leadsToIndex = Game.RED_ENTRY_INDEX;
+        } else if (color.equals(Game.BLUE)) {
+            leadsToIndex = Game.BLUE_ENTRY_INDEX;
+        } else if (color.equals(Game.YELLOW)) {
+            leadsToIndex = Game.YELLOW_ENTRY_INDEX;
+        } else if (color.equals(Game.GREEN)) {
+            leadsToIndex = Game.GREEN_ENTRY_INDEX;
         }
     }
 

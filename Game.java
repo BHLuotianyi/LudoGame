@@ -116,18 +116,21 @@ public class Game {
         int newPlaneId = 0; // To assign a unique ID to each plane, which corresponds to its index in the global planes list
         for (int i = 0; i < players.length; i++) { // i is the index of the player in the players list
             Plane[] tempListOfPlanes = new Plane[4]; // Create a temporal list to storage newly created planes
+            Plane[] tempHomePlanes = new Plane[4]; // Separate list for planes that are currently at home
             for (int j = 0; j < 4; j++) { // j is the index of the plane in the player's planes list
+                Plane newPlane;
                 if (j == 0) {
-                    tempListOfPlanes[j] = new CommanderPlane(getPlayerById(i), newPlaneId, getPlayerById(i).getShortName()+j); // A plane's short name would be e.g. "R0", "B1", etc. (the player's short name + the plane's index in the player's planes list) 
-                    planes[newPlaneId] = tempListOfPlanes[j];
+                    newPlane = new CommanderPlane(getPlayerById(i), newPlaneId, getPlayerById(i).getShortName()+j); // A plane's short name would be e.g. "R0", "B1", etc. (the player's short name + the plane's index in the player's planes list) 
                 } else {
-                    tempListOfPlanes[j] = new FighterPlane(getPlayerById(i), newPlaneId, getPlayerById(i).getShortName()+j);
-                    planes[newPlaneId] = tempListOfPlanes[j];
+                    newPlane = new FighterPlane(getPlayerById(i), newPlaneId, getPlayerById(i).getShortName()+j);
                 }
+                tempListOfPlanes[j] = newPlane;
+                tempHomePlanes[j] = newPlane;
+                planes[newPlaneId] = newPlane;
                 newPlaneId++;
             }
             players[i].setPlanes(tempListOfPlanes);
-            players[i].setHome(tempListOfPlanes);
+            players[i].setHome(tempHomePlanes);
         }
     }
 
@@ -150,6 +153,7 @@ public class Game {
      */
     public void takeoffPlane(Plane plane) {
         plane.setIsAtHome(false);
+        plane.getOwner().removePlaneFromHome(plane);
         plane.setPos(plane.getOwner().getStartingBlockIndex());
         map[plane.getPos()].onLanding(this, plane, false);
     }

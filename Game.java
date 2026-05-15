@@ -152,10 +152,14 @@ public class Game {
      * @param plane the plane to take off
      */
     public void takeoffPlane(Plane plane) {
-        plane.setIsAtHome(false);
-        plane.getOwner().removePlaneFromHome(plane);
-        plane.setPos(plane.getOwner().getStartingBlockIndex());
-        map[plane.getPos()].onLanding(this, plane, false);
+        if (plane.getIsAtHome()) { // Plane can only take off if it is at home
+            plane.setIsAtHome(false);
+            plane.getOwner().removePlaneFromHome(plane);
+            plane.setPos(plane.getOwner().getStartingBlockIndex());
+            plane.setHeadingBlock((plane.getPos() + 1) % MAIN_LOOP_SIZE);
+            map[plane.getPos()].onLanding(this, plane, false);
+        }
+
     }
 
     /**

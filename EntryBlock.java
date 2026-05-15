@@ -35,13 +35,27 @@ public class EntryBlock extends MapBlock {
     }
 
     /**
-     * Stops the plane from reversing when it passes through this block.
+     * Stops the plane from reversing when it passes through this entry block.
      *
      * @param game the current game
      * @param plane the plane that passes through this block
      */
     public void onPassing(Game game, Plane plane) {
         super.onPassing(game, plane);
+        if (plane.getIsReversing()) {
+            plane.setIsReversing(false);
+        }
+    }
+
+    /**
+     * Stops the plane from reversing when it lands on this entry block.
+     *
+     * @param game the current game
+     * @param plane the plane that landed on this block
+     * @param ifJumped whether the plane arrived as part of a jump
+     */
+    public void onLanding(Game game, Plane plane, boolean ifJumped) {
+        super.onLanding(game, plane, ifJumped);
         if (plane.getIsReversing()) {
             plane.setIsReversing(false);
         }

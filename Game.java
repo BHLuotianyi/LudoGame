@@ -36,6 +36,18 @@ public class Game {
 
     /** Green final destination block index in the board array. */
     public static final int GREEN_FINAL_INDEX = GREEN_ENTRY_INDEX + FINAL_ROUTE_LENGTH - 1;
+
+    /** Red main-loop entry block index. */
+    public static final int RED_MAIN_ENTRY_INDEX = 0;
+
+    /** Blue main-loop entry block index. */
+    public static final int BLUE_MAIN_ENTRY_INDEX = 13;
+
+    /** Yellow main-loop entry block index. */
+    public static final int YELLOW_MAIN_ENTRY_INDEX = 26;
+
+    /** Green main-loop entry block index. */
+    public static final int GREEN_MAIN_ENTRY_INDEX = 39;
     
     /** Number of players in the game. */
     public static final int NUM_PLAYERS = 4;
@@ -179,6 +191,40 @@ public class Game {
     }
 
     /**
+     * Updates the next block a plane should move to based on its current
+     * position, color, and reversing state.
+     *
+     * @param plane the plane whose heading should be updated
+     */
+    private void updateHeadingBlock(Plane plane) {
+        int currPos = plane.getPos();
+
+        if ((map[currPos] instanceof EntryBlock) && map[currPos].getColor().equals(plane.getColor())) {
+            plane.setHeadingBlock(((EntryBlock) map[currPos]).getLeadsToIndex());
+        } else if (map[currPos] instanceof FinalBlock) {
+            plane.setHeadingBlock(currPos - 1);
+        } else if (map[currPos] instanceof FinalRouteBlock) {
+            if (plane.getIsReversing()) {
+                if (currPos == RED_ENTRY_INDEX) {
+                    plane.setHeadingBlock(RED_MAIN_ENTRY_INDEX);
+                } else if (currPos == BLUE_ENTRY_INDEX) {
+                    plane.setHeadingBlock(BLUE_MAIN_ENTRY_INDEX);
+                } else if (currPos == YELLOW_ENTRY_INDEX) {
+                    plane.setHeadingBlock(YELLOW_MAIN_ENTRY_INDEX);
+                } else if (currPos == GREEN_ENTRY_INDEX) {
+                    plane.setHeadingBlock(GREEN_MAIN_ENTRY_INDEX);
+                } else {
+                    plane.setHeadingBlock(currPos - 1);
+                }
+            } else {
+                plane.setHeadingBlock(currPos + 1);
+            }
+        } else {
+            plane.setHeadingBlock((currPos + 1) % MAIN_LOOP_SIZE);
+        }
+    }
+
+    /**
      * Moves a plane forward by the requested number of steps.
      *
      * The method advances recursively so each step can update the plane's
@@ -189,30 +235,23 @@ public class Game {
      * @param steps the number of blocks to advance
      * @param ifJump whether this movement was caused by a jump
      */
-    public void movePlane(Plane plane, int steps, boolean ifJump) { 
-
-        if (!plane.getIsMoving()) {
+    public void movePlane(Plane plane, int steps, boolean ifJump) {
+        if (!plane.getIsMoving()) { // Adds a flag when the plane starts moving
             map[plane.getPos()].removePlane(plane); // Remove the plane from its current block
             plane.setIsMoving(true);
         }
-        plane.setPos(plane.getHeadingBlock());
 
-        if ((map[plane.getPos()] instanceof EntryBlock) && (map[plane.getPos()].getColor().equals(plane.getColor()))) {
-            plane.setHeadingBlock(((EntryBlock)map[plane.getPos()]).getLeadsToIndex());
-        } else if (map[plane.getPos()] instanceof FinalRouteBlock && !plane.getIsReversing()) {
-            plane.setHeadingBlock(plane.getHeadingBlock() + 1);
-        } else if (map[plane.getPos()] instanceof FinalRouteBlock && plane.getIsReversing()) {
-            plane.setHeadingBlock(plane.getHeadingBlock() - 1);
-        } else {
-            plane.setHeadingBlock((plane.getHeadingBlock() + 1 ) % MAIN_LOOP_SIZE);
-        }
+        plane.setPos(plane.getHeadingBlock()); // Move the plane to its next expected block
+
         steps--;
 
         if (steps > 0) {
             map[plane.getPos()].onPassing(this, plane); // Trigger the onPassing event for the block that the plane is passing through
+            updateHeadingBlock(plane); // This need to be after onPassing due to reversing state handling for final route blocks
             movePlane(plane, steps, ifJump); // If there are still steps left to move, recursively call movePlane until the plane has moved the required number of steps
         } else {
-            plane.setIsMoving(false);
+            updateHeadingBlock(plane);
+            plane.setIsMoving(false); // Remove the moving flag
             map[plane.getPos()].onLanding(this, plane, ifJump); // Trigger the onLanding event for the block that the plane has landed on
         }
     }

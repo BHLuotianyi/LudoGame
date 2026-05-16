@@ -33,8 +33,14 @@ public class GameController {
 
     /**
      * Runs one player's turn.
+     *
+     * This method currently handles the basic turn sequence: display state,
+     * roll the die, choose a plane, move or take off, resolve optional movement,
+     * and advance to the next player.
      */
     private void playTurn() {
+        // TODO: Add full turn legality rules, including when a home plane may
+        // take off and whether a player has no valid move for the rolled value.
         Player player = game.getCurrPlayer();
         ui.displayBoard(game);
         ui.displayPlayerStatus(player);

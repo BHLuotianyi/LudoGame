@@ -15,11 +15,15 @@ public class Ui {
     }
 
     /**
-     * Displays a short board summary.
+     * Displays the current board state.
+     *
+     * This method currently prints only occupied blocks as a compact summary.
      *
      * @param game the game to display
      */
     public void displayBoard(Game game) {
+        // TODO: Replace this summary with a full board layout that shows the
+        // main loop, each final route, and each player's home area.
         MapBlock[] map = game.getMap();
         System.out.println();
         System.out.println("Board:");
@@ -63,10 +67,14 @@ public class Ui {
     /**
      * Asks the player to choose one of their planes.
      *
+     * This method currently rejects only finished planes.
+     *
      * @param player the current player
      * @return the chosen plane
      */
     public Plane askPlaneChoice(Player player) {
+        // TODO: Limit choices to planes that can legally move for the current
+        // die roll once GameController or Game exposes that legal-move list.
         while (true) {
             System.out.print("Choose a plane: ");
             String input = scanner.nextLine().trim().toUpperCase();

@@ -3,6 +3,12 @@
  */
 class Main {
     /**
+     * Prevents creating an entry-point object.
+     */
+    private Main() {
+    }
+
+    /**
      * Starts the application.
      *
      * @param args command-line arguments

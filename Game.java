@@ -172,6 +172,7 @@ public class Game {
         initPlayers();
         initPlanes();
         turnCount = 0;
+        currPlayer = players[0];
     }
 
     /**
@@ -279,6 +280,51 @@ public class Game {
      */
     public boolean getIfGameOver() {
         return isGameOver;
+    }
+
+    /**
+     * Reports whether a plane may take a four-block jump from its current block.
+     *
+     * @param plane the plane to check
+     * @param ifJumped true if the plane arrived as part of a special movement
+     * @return true if the plane can jump; false otherwise
+     */
+    public boolean canJump(Plane plane, boolean ifJumped) {
+        if ((plane == null) || ifJumped || plane.getIsAtHome() || plane.getIfWin()) {
+            return false;
+        }
+
+        MapBlock block = map[plane.getPos()];
+        return (block instanceof MainMapBlock)
+                && !(block instanceof ShortCutBlock)
+                && plane.getColor().equals(block.getColor());
+    }
+
+    /**
+     * Reports whether a plane may take the shortcut from its current block.
+     *
+     * @param plane the plane to check
+     * @return true if the plane can take the shortcut; false otherwise
+     */
+    public boolean canTakeShortcut(Plane plane) {
+        if ((plane == null) || plane.getIsAtHome() || plane.getIfWin()) {
+            return false;
+        }
+
+        MapBlock block = map[plane.getPos()];
+        return (block instanceof ShortCutBlock) && plane.getColor().equals(block.getColor());
+    }
+
+    /**
+     * Advances the turn to the next player.
+     */
+    public void nextTurn() {
+        if (currPlayer.getFinishedCount() == 4) {
+            isGameOver = true;
+        } else {
+            turnCount++;
+            currPlayer = players[turnCount % players.length];
+        }
     }
 
     /**

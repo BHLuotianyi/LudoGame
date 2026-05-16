@@ -8,7 +8,7 @@ class Main {
      * @param args command-line arguments
      */
     public static void main(String[] args) {
-        // Sample comment
-        // d
+        GameController controller = new GameController();
+        controller.play();
     }
 }

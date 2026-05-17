@@ -1,9 +1,63 @@
-/** 
- * EntryBlock.java
- * Represents an entry block on the Ludo game map, which allows a player to enter their piece onto the main loop.
+/**
+ * Main-loop block that leads a matching-color plane into its final route.
  */
 public class EntryBlock extends MapBlock {
-    public EntryBlock(int index, String color) {
-        super(index, color);
+    /** Index of the first final-route block reached from this entry block. */
+    private int leadsToIndex;
+
+    /**
+     * Creates an entry block and maps it to the first final-route block for its
+     * color.
+     *
+     * @param id the block's index in the game map
+     * @param color the block color
+     */
+    public EntryBlock(int id, String color) {
+        super(id, color);
+        if (color.equals(Game.RED)) {
+            leadsToIndex = Game.RED_ENTRY_INDEX;
+        } else if (color.equals(Game.BLUE)) {
+            leadsToIndex = Game.BLUE_ENTRY_INDEX;
+        } else if (color.equals(Game.YELLOW)) {
+            leadsToIndex = Game.YELLOW_ENTRY_INDEX;
+        } else if (color.equals(Game.GREEN)) {
+            leadsToIndex = Game.GREEN_ENTRY_INDEX;
+        }
+    }
+
+    /**
+     * Gets the first final-route block reached from this entry block.
+     *
+     * @return the destination final-route index
+     */
+    public int getLeadsToIndex() {
+        return leadsToIndex;
+    }
+
+    /**
+     * Stops the plane from reversing when it passes through this entry block.
+     *
+     * @param game the current game
+     * @param plane the plane that passes through this block
+     */
+    public void onPassing(Game game, Plane plane) {
+        super.onPassing(game, plane);
+        if (plane.getIsReversing()) {
+            plane.setIsReversing(false);
+        }
+    }
+
+    /**
+     * Stops the plane from reversing when it lands on this entry block.
+     *
+     * @param game the current game
+     * @param plane the plane that landed on this block
+     * @param ifJumped whether the plane arrived as part of a jump
+     */
+    public void onLanding(Game game, Plane plane, boolean ifJumped) {
+        super.onLanding(game, plane, ifJumped);
+        if (plane.getIsReversing()) {
+            plane.setIsReversing(false);
+        }
     }
 }

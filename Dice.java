@@ -1,13 +1,20 @@
 /**
- * Dice class for the Ludo project.
- * Implements only the green getter as per UML specifications.
+ * Six-sided die used to generate movement values.
  */
 public class Dice {
+    /** Most recent die-roll result. */
     private int result;
 
     /**
-     * Generates and returns a random dice roll between 1 and 6.
-     * This acts as the primary method to get a move value.
+     * Creates a die ready to be rolled.
+     */
+    public Dice() {
+    }
+
+    /**
+     * Rolls the die and returns the generated value.
+     *
+     * @return a random value from 1 through 6
      */
     public int getResult() {
         // Generates a random number from 1 to 6

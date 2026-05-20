@@ -53,10 +53,16 @@ public abstract class MapBlock {
             if (newcomer.getLevel() < maxLevelInBlock) {
                 game.sendPlaneHome(newcomer);
             } else {
+                // Collect planes to send home to avoid concurrent modification issues
+                Plane[] planesToSendHome = new Plane[landingPlanes.length];
+                int count = 0;
                 for (int i = 0; i< landingPlanes.length; i++) {
                     if (landingPlanes[i] != null) {
-                        game.sendPlaneHome(landingPlanes[i]);
+                        planesToSendHome[count++] = landingPlanes[i];
                     }
+                }
+                for (int i = 0; i < count; i++) {
+                    game.sendPlaneHome(planesToSendHome[i]);
                 }
                 organizeLandingPlanes();
                 addPlane(newcomer);

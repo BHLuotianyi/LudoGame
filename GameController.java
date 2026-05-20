@@ -61,6 +61,7 @@ public class GameController {
                         selectedPlane = player.getPlanes()[idx];
                         game.takeoffPlane(selectedPlane);
                         ui.displayTakeOff(selectedPlane);
+                        selectedPlane = null; // Prevent jump after takeoff
                     }
                 } else {
                     int idx = ui.getActivePlaneChoice(player);
@@ -76,6 +77,7 @@ public class GameController {
                     selectedPlane = player.getPlanes()[idx];
                     game.takeoffPlane(selectedPlane);
                     ui.displayTakeOff(selectedPlane);
+                    selectedPlane = null; // Prevent jump after takeoff
                 }
 
             } else if (hasActive) {

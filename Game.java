@@ -37,17 +37,29 @@ public class Game {
     /** Green final destination block index in the board array. */
     public static final int GREEN_FINAL_INDEX = GREEN_ENTRY_INDEX + FINAL_ROUTE_LENGTH - 1;
 
-    /** Red main-loop entry block index. */
-    public static final int RED_MAIN_ENTRY_INDEX = 0;
+    /** Red main-loop starting block index. */
+    public static final int RED_START_INDEX = 3;
 
-    /** Blue main-loop entry block index. */
-    public static final int BLUE_MAIN_ENTRY_INDEX = 13;
+    /** Blue main-loop starting block index. */
+    public static final int BLUE_START_INDEX = 16;
 
-    /** Yellow main-loop entry block index. */
-    public static final int YELLOW_MAIN_ENTRY_INDEX = 26;
+    /** Yellow main-loop starting block index. */
+    public static final int YELLOW_START_INDEX = 29;
 
-    /** Green main-loop entry block index. */
-    public static final int GREEN_MAIN_ENTRY_INDEX = 39;
+    /** Green main-loop starting block index. */
+    public static final int GREEN_START_INDEX = 42;
+
+    /** Red main-loop turning block index to enter final route. */
+    public static final int RED_TURN_INDEX = 51;
+
+    /** Blue main-loop turning block index to enter final route. */
+    public static final int BLUE_TURN_INDEX = 12;
+
+    /** Yellow main-loop turning block index to enter final route. */
+    public static final int YELLOW_TURN_INDEX = 25;
+
+    /** Green main-loop turning block index to enter final route. */
+    public static final int GREEN_TURN_INDEX = 38;
     
     /** Number of players in the game. */
     public static final int NUM_PLAYERS = 4;
@@ -89,13 +101,13 @@ public class Game {
         for (int i = 0; i < map.length; i++) {
             String color = "";
 
-            if ((i < MAIN_LOOP_SIZE) && (i % 4 == 0)) { // Handle the main loop blocks' colors
+            if ((i < MAIN_LOOP_SIZE) && ((i + 1) % 4 == 0)) { // Handle the main loop blocks' colors
                 color = RED;
-            } else if ((i < MAIN_LOOP_SIZE) && (i % 4 == 1)) {
+            } else if ((i < MAIN_LOOP_SIZE) && ((i + 1) % 4 == 1)) {
                 color = BLUE;
-            } else if ((i < MAIN_LOOP_SIZE) && (i % 4 == 2)) {
+            } else if ((i < MAIN_LOOP_SIZE) && ((i + 1) % 4 == 2)) {
                 color = YELLOW;
-            } else if ((i < MAIN_LOOP_SIZE) && (i % 4 == 3)) {
+            } else if ((i < MAIN_LOOP_SIZE) && ((i + 1) % 4 == 3)) {
                 color = GREEN;
             } else if ((i >= RED_ENTRY_INDEX) && (i < BLUE_ENTRY_INDEX)) { // Handle the final route blocks' colors
                 color = RED;
@@ -110,9 +122,9 @@ public class Game {
             // Create the appropriate MapBlock object based on the index and color
             boolean isFinalDestination = (i == RED_FINAL_INDEX) || (i == BLUE_FINAL_INDEX) || (i == YELLOW_FINAL_INDEX) || (i == GREEN_FINAL_INDEX);
 
-            if ((i < MAIN_LOOP_SIZE) && (i % 13 == 0)) {
+            if (i == RED_TURN_INDEX || i == BLUE_TURN_INDEX || i == YELLOW_TURN_INDEX || i == GREEN_TURN_INDEX) {
                 map[i] = new EntryBlock(i, color);
-            } else if ((i < MAIN_LOOP_SIZE) && (i % 7 == 0)) {
+            } else if ((i < MAIN_LOOP_SIZE) && (i % 13 == 6)) {
                 map[i] = new ShortCutBlock(i, color);
             } else if (i < MAIN_LOOP_SIZE) {
                 map[i] = new MainMapBlock(i, color);
@@ -129,10 +141,10 @@ public class Game {
      */
     private void initPlayers() {
         players = new Player[4];
-        players[0] = new Player(0, RED, 3);
-        players[1] = new Player(1, BLUE, 16);
-        players[2] = new Player(2, YELLOW, 29);
-        players[3] = new Player(3, GREEN, 42);
+        players[0] = new Player(0, RED, RED_START_INDEX);
+        players[1] = new Player(1, BLUE, BLUE_START_INDEX);
+        players[2] = new Player(2, YELLOW, YELLOW_START_INDEX);
+        players[3] = new Player(3, GREEN, GREEN_START_INDEX);
     }
 
     /**
@@ -186,7 +198,7 @@ public class Game {
             plane.getOwner().removePlaneFromHome(plane);
             plane.setPos(plane.getOwner().getStartingBlockIndex());
             plane.setHeadingBlockIndex((plane.getPos() + 1) % MAIN_LOOP_SIZE);
-            map[plane.getPos()].onLanding(this, plane, false);
+            map[plane.getPos()].onLanding(this, plane, true);
         }
 
     }
@@ -207,13 +219,13 @@ public class Game {
         } else if (map[currPos] instanceof FinalRouteBlock) {
             if (plane.getIsReversing()) {
                 if (currPos == RED_ENTRY_INDEX) {
-                    plane.setHeadingBlockIndex(RED_MAIN_ENTRY_INDEX);
+                    plane.setHeadingBlockIndex(RED_TURN_INDEX);
                 } else if (currPos == BLUE_ENTRY_INDEX) {
-                    plane.setHeadingBlockIndex(BLUE_MAIN_ENTRY_INDEX);
+                    plane.setHeadingBlockIndex(BLUE_TURN_INDEX);
                 } else if (currPos == YELLOW_ENTRY_INDEX) {
-                    plane.setHeadingBlockIndex(YELLOW_MAIN_ENTRY_INDEX);
+                    plane.setHeadingBlockIndex(YELLOW_TURN_INDEX);
                 } else if (currPos == GREEN_ENTRY_INDEX) {
-                    plane.setHeadingBlockIndex(GREEN_MAIN_ENTRY_INDEX);
+                    plane.setHeadingBlockIndex(GREEN_TURN_INDEX);
                 } else {
                     plane.setHeadingBlockIndex(currPos - 1);
                 }

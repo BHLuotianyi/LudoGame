@@ -138,12 +138,12 @@ public class Ui {
 
         System.out.print("     "); 
         for (int x = 0; x < 15; x++) {
-            System.out.printf(" %-3d", x);
+            System.out.printf(" %2d ", x);
         }
         System.out.println();
         System.out.print("     ");
         for (int x = 0; x < 15; x++) {
-            System.out.print("---- ");
+            System.out.print("----");
         }
         System.out.println();
 
@@ -268,7 +268,8 @@ public class Ui {
             if (planes[i].getPos() == -1) {
                 System.out.print(planes[i].getName() + "(HOME)  ");
             } else {
-                System.out.print(planes[i].getName() + "(pos:" + planes[i].getPos() + ")  ");
+                int[] coords = getCoords(planes[i].getPos());
+                System.out.print(planes[i].getName() + "(" + coords[0] + "," + coords[1] + ")  ");
             }
         }
         System.out.println();
@@ -323,7 +324,8 @@ public class Ui {
      * @param newPos The new position of the plane
      */
     public void displayMove(Plane plane, int steps, int newPos) {
-        System.out.println("  >> " + plane.getName() + " moved " + steps + " steps -> now at position " + newPos);
+        int[] coords = getCoords(newPos);
+        System.out.println("  >> " + plane.getName() + " moved " + steps + " steps -> now at (" + coords[0] + "," + coords[1] + ")");
     }
 
     /**
@@ -341,7 +343,8 @@ public class Ui {
      * @param newPos The position after the jump
      */
     public void displaySameColorJump(Plane plane, int newPos) {
-        System.out.println(getColorCode(plane.getColor()) + "  >> " + plane.getName() + " landed on same color - jumped to position " + newPos + "!" + RESET);
+        int[] coords = getCoords(newPos);
+        System.out.println(getColorCode(plane.getColor()) + "  >> " + plane.getName() + " landed on same color - jumped to (" + coords[0] + "," + coords[1] + ")!" + RESET);
     }
 
     /**
@@ -350,7 +353,8 @@ public class Ui {
      * @param newPos The position after the shortcut jump
      */
     public void displayShortcutJump(Plane plane, int newPos) {
-        System.out.println(getColorCode(plane.getColor()) + "  >> " + plane.getName() + " hit a SHORTCUT - jumped to position " + newPos + "!" + RESET);
+        int[] coords = getCoords(newPos);
+        System.out.println(getColorCode(plane.getColor()) + "  >> " + plane.getName() + " hit a SHORTCUT - jumped to (" + coords[0] + "," + coords[1] + ")!" + RESET);
     }
 
     /**
@@ -470,7 +474,8 @@ public class Ui {
             if (planes[i].getPos() != -1 && !planes[i].getIfWin()) {
                 validIdx[count] = i;
                 count++;
-                System.out.println("    " + count + ". " + planes[i].getName() + " (at position " + planes[i].getPos() + ")");
+                int[] coords = getCoords(planes[i].getPos());
+                System.out.println("    " + count + ". " + planes[i].getName() + " (at (" + coords[0] + "," + coords[1] + "))");
             }
         }
 

@@ -61,11 +61,11 @@ public class Player {
     /**
      * Removes a plane from the player's home area.
      *
-     * @param plane the plane to remove from the home area
+     * @param targetPlane the plane to remove from the home area
      */
-    public void removePlaneFromHome(Plane plane) {
+    public void removePlaneFromHome(Plane targetPlane) {
         for (int i = 0; i < home.length; i++) {
-            if (home[i] == plane) {
+            if (home[i] == targetPlane) {
                 home[i] = null;
                 break;
             }

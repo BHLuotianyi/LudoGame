@@ -13,6 +13,17 @@ public class FinalBlock extends FinalRouteBlock{
     }
 
     /**
+     * Reverse the plane when it passes through this block.
+     *
+     * @param game the current game
+     * @param plane the plane that passes through this block
+     */
+    public void onPassing(Game game, Plane plane) {
+        super.onPassing(game, plane);
+        plane.setIsReversing(true);
+    }
+
+    /**
      * Applies the landing behavior for this final block.
      *
      * @param game the current game
@@ -23,16 +34,5 @@ public class FinalBlock extends FinalRouteBlock{
         super.onLanding(game, plane, ifJumped);
         this.removePlane(plane);
         plane.win();
-    }
-
-    /**
-     * Reverse the plane when it passes through this block.
-     *
-     * @param game the current game
-     * @param plane the plane that passes through this block
-     */
-    public void onPassing(Game game, Plane plane) {
-        super.onPassing(game, plane);
-        plane.setIsReversing(true);
     }
 }

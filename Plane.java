@@ -34,7 +34,7 @@ public abstract class Plane {
     private boolean isMoving;
 
     /** Map index of the next block this plane will enter. */
-    private int headingBlock;
+    private int headingBlockIndex;
 
     /** Whether this plane is currently moving in reverse. */
     private boolean isReversing;
@@ -173,7 +173,7 @@ public abstract class Plane {
      * @param isMoving true if the plane is moving; false otherwise
      */
     public void setIsMoving(boolean isMoving) {
-            this.isMoving = isMoving;
+        this.isMoving = isMoving;
     }
 
     /**
@@ -181,17 +181,17 @@ public abstract class Plane {
      *
      * @return the map index of the next block
      */
-    public int getHeadingBlock() {
-        return this.headingBlock;
+    public int getHeadingBlockIndex() {
+        return this.headingBlockIndex;
     }
 
     /**
      * Sets the next block the plane will enter.
      *
-     * @param headingBlock the map index of the next block
+     * @param index the map index of the next block
      */
-    public void setHeadingBlock(int headingBlock) {
-        this.headingBlock = headingBlock;
+    public void setHeadingBlockIndex(int index) {
+        this.headingBlockIndex = index;
     }
 
     /**

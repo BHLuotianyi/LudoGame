@@ -185,7 +185,7 @@ public class Game {
             plane.setIsAtHome(false);
             plane.getOwner().removePlaneFromHome(plane);
             plane.setPos(plane.getOwner().getStartingBlockIndex());
-            plane.setHeadingBlock((plane.getPos() + 1) % MAIN_LOOP_SIZE);
+            plane.setHeadingBlockIndex((plane.getPos() + 1) % MAIN_LOOP_SIZE);
             map[plane.getPos()].onLanding(this, plane, false);
         }
 
@@ -201,27 +201,27 @@ public class Game {
         int currPos = plane.getPos();
 
         if ((map[currPos] instanceof EntryBlock) && map[currPos].getColor().equals(plane.getColor())) {
-            plane.setHeadingBlock(((EntryBlock) map[currPos]).getLeadsToIndex());
+            plane.setHeadingBlockIndex(((EntryBlock) map[currPos]).getLeadsToIndex());
         } else if (map[currPos] instanceof FinalBlock) {
-            plane.setHeadingBlock(currPos - 1);
+            plane.setHeadingBlockIndex(currPos - 1);
         } else if (map[currPos] instanceof FinalRouteBlock) {
             if (plane.getIsReversing()) {
                 if (currPos == RED_ENTRY_INDEX) {
-                    plane.setHeadingBlock(RED_MAIN_ENTRY_INDEX);
+                    plane.setHeadingBlockIndex(RED_MAIN_ENTRY_INDEX);
                 } else if (currPos == BLUE_ENTRY_INDEX) {
-                    plane.setHeadingBlock(BLUE_MAIN_ENTRY_INDEX);
+                    plane.setHeadingBlockIndex(BLUE_MAIN_ENTRY_INDEX);
                 } else if (currPos == YELLOW_ENTRY_INDEX) {
-                    plane.setHeadingBlock(YELLOW_MAIN_ENTRY_INDEX);
+                    plane.setHeadingBlockIndex(YELLOW_MAIN_ENTRY_INDEX);
                 } else if (currPos == GREEN_ENTRY_INDEX) {
-                    plane.setHeadingBlock(GREEN_MAIN_ENTRY_INDEX);
+                    plane.setHeadingBlockIndex(GREEN_MAIN_ENTRY_INDEX);
                 } else {
-                    plane.setHeadingBlock(currPos - 1);
+                    plane.setHeadingBlockIndex(currPos - 1);
                 }
             } else {
-                plane.setHeadingBlock(currPos + 1);
+                plane.setHeadingBlockIndex(currPos + 1);
             }
         } else {
-            plane.setHeadingBlock((currPos + 1) % MAIN_LOOP_SIZE);
+            plane.setHeadingBlockIndex((currPos + 1) % MAIN_LOOP_SIZE);
         }
     }
 
@@ -245,7 +245,7 @@ public class Game {
             plane.setIsMoving(true);
         }
 
-        plane.setPos(plane.getHeadingBlock()); // Move the plane to its next expected block
+        plane.setPos(plane.getHeadingBlockIndex()); // Move the plane to its next expected block
 
         steps--;
 

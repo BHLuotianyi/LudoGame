@@ -201,6 +201,42 @@ public class Ui {
     }
 
     /**
+     * Asks the user a yes/no question.
+     * @param question The question to ask
+     * @return true if the user answers yes, false if no
+     */
+    public boolean askYesNo(String question) {
+        while (true) {
+            System.out.print("  " + question + " (y/n): ");
+            String input = scanner.nextLine().trim().toLowerCase();
+            if (input.equals("y") || input.equals("yes")) {
+                return true;
+            } else if (input.equals("n") || input.equals("no")) {
+                return false;
+            }
+            displayInvalidInput();
+        }
+    }
+
+    /**
+     * Asks the user if they want to take a shortcut.
+     * @param plane The plane that landed on a shortcut block
+     * @return true if they choose to take the shortcut
+     */
+    public boolean askShortcut(Plane plane) {
+        return askYesNo("Take the shortcut for " + plane.getName() + "?");
+    }
+
+    /**
+     * Asks the user if they want to jump.
+     * @param plane The plane that landed on a jump block
+     * @return true if they choose to jump
+     */
+    public boolean askJump(Plane plane) {
+        return askYesNo("Jump 4 blocks with " + plane.getName() + "?");
+    }
+
+    /**
      * Displays an error message when the user enters invalid input.
      */
     public void displayInvalidInput() {

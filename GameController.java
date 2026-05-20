@@ -89,9 +89,24 @@ public class GameController {
                 ui.displayNoMoves(player);
             }
 
-            // === MERGE POINT: Calling your partner's code correctly ===
-            if (selectedPlane != null) {
-                handleOptionalMoves(selectedPlane, false);
+            // === Handle Optional Jumps and Shortcuts ===
+            if (selectedPlane != null && !selectedPlane.getIfWin()) {
+                // 1. Check for Shortcut first
+                if (game.canTakeShortcut(selectedPlane)) {
+                    if (ui.askShortcut(selectedPlane)) {
+                        game.movePlane(selectedPlane, 12, false);
+                        ui.displayShortcutJump(selectedPlane, selectedPlane.getPos());
+                    }
+                }
+                
+                // 2. Check for Jump (even if a shortcut was just taken)
+                // We pass 'false' because even if a shortcut was taken, it's not a 'jump'
+                if (game.canJump(selectedPlane, false)) {
+                    if (ui.askJump(selectedPlane)) {
+                        game.movePlane(selectedPlane, 4, true);
+                        ui.displaySameColorJump(selectedPlane, selectedPlane.getPos());
+                    }
+                }
             }
 
             if (steps == 6 && !game.getIfGameOver()) {
@@ -106,28 +121,8 @@ public class GameController {
             game.nextTurn();
         }
     }
-    /**
-     * Handles optional shortcut and jump choices after a plane lands.
-     *
-     * @param plane the plane that just landed
-     * @param arrivedBySpecialMove true if the landing came from a jump or shortcut
-     */
-    private void handleOptionalMoves(Plane plane, boolean arrivedBySpecialMove) {
-        if (!plane.getIsAtHome() && !plane.getIfWin()) {
-            if (game.canTakeShortcut(plane)) {
-                if (ui.askYesNo("Take the shortcut for " + plane.getName() + "?")) {
-                    game.movePlane(plane, 12, arrivedBySpecialMove);
-                    handleOptionalMoves(plane, arrivedBySpecialMove);
-                }
-            } else if (game.canJump(plane, arrivedBySpecialMove)) {
-                if (ui.askYesNo("Jump 4 blocks with " + plane.getName() + "?")) {
-                    game.movePlane(plane, 4, true);
-                    handleOptionalMoves(plane, true);
-                }
-            }
-        }
-    }
-private boolean hasPlaneAtHome(Player player) {
+
+    private boolean hasPlaneAtHome(Player player) {
         Plane[] planes = player.getPlanes();
         for (int i = 0; i < planes.length; i++) {
             if (planes[i].getIsAtHome()) {

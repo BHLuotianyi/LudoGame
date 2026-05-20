@@ -110,6 +110,13 @@ public class GameController {
                     }
                 }
             }
+            
+            // Check win condition right after the turn ends, before evaluating extra turns
+            if (player.getFinishedCount() == 4) {
+                // Next turn call inside loop handles game over state flip too if not doing nextTurn here, 
+                // but let's just break the extra turn loop since game logic will flip it later or we can rely on loop condition
+                break;
+            }
 
             if (steps == 6 && !game.getIfGameOver()) {
                 ui.displayMessage(player.getColor() + " rolled 6 - taking another turn!");

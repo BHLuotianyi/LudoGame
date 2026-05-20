@@ -36,7 +36,7 @@ public class Player {
      */
     public Player(int id, String color, int startingBlockIndex) {
         this.id = id;
-        this.color = color; // Assuming color is represented by the player's ID (0-3)
+        this.color = color;
         this.finishedCount = 0;
         this.planes = new Plane[4]; // Each player has 4 planes
         this.home = new Plane[4]; // Each player has a home base of 4 planes

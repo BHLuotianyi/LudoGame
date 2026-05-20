@@ -328,6 +328,15 @@ public class Game {
     }
 
     /**
+     * Moves a plane through a shortcut.
+     *
+     * @param plane the plane taking the shortcut
+     */
+    public void takeShortcut(Plane plane) {
+        movePlane(plane, 12, false);
+    }
+
+    /**
      * Advances the turn to the next player.
      */
     public void nextTurn() {

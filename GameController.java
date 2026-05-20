@@ -24,41 +24,88 @@ public class GameController {
      * Runs the game loop until the game ends.
      */
     public void play() {
+        ui.displayWelcome();
+
         while (!game.getIfGameOver()) {
             playTurn();
         }
 
-        ui.showMessage(game.getCurrPlayer().getColor() + " wins!");
+        ui.displayGameOver(game.getCurrPlayer());
     }
 
     /**
-     * Runs one player's turn.
-     *
-     * This method currently handles the basic turn sequence: display state,
-     * roll the die, choose a plane, move or take off, resolve optional movement,
-     * and advance to the next player.
+     * Runs one full turn for the current player.
      */
-    private void playTurn() {
-        // TODO: Add full turn legality rules, including when a home plane may
-        // take off and whether a player has no valid move for the rolled value.
+    public void playTurn() {
         Player player = game.getCurrPlayer();
-        ui.displayBoard(game);
-        ui.displayPlayerStatus(player);
+        boolean extraTurn = true;
 
-        int steps = dice.getResult();
-        ui.showMessage("Rolled " + steps + ".");
+        while (extraTurn && !game.getIfGameOver()) {
 
-        Plane plane = ui.askPlaneChoice(player);
-        if (plane.getIsAtHome()) {
-            game.takeoffPlane(plane);
-        } else {
-            game.movePlane(plane, steps, false);
+            ui.displayBoard(game);
+            ui.displayPlayerStatus(player, true);
+            ui.promptRollDice();
+
+            int steps = dice.getResult();
+            ui.displayDiceResult(steps);
+
+            boolean hasHome   = hasPlaneAtHome(player);
+            boolean hasActive = hasActivePlane(player);
+
+            Plane selectedPlane = null; 
+
+            if (steps == 6 && hasHome && hasActive) {
+                if (ui.askTakeOffOrMove()) {
+                    int idx = ui.getHomePlaneChoice(player);
+                    if (idx != -1) {
+                        selectedPlane = player.getPlanes()[idx];
+                        game.takeoffPlane(selectedPlane);
+                        ui.displayTakeOff(selectedPlane);
+                    }
+                } else {
+                    int idx = ui.getActivePlaneChoice(player);
+                    if (idx != -1) {
+                        selectedPlane = player.getPlanes()[idx];
+                        game.movePlane(selectedPlane, steps, false);
+                    }
+                }
+
+            } else if (steps == 6 && hasHome) {
+                int idx = ui.getHomePlaneChoice(player);
+                if (idx != -1) {
+                    selectedPlane = player.getPlanes()[idx];
+                    game.takeoffPlane(selectedPlane);
+                    ui.displayTakeOff(selectedPlane);
+                }
+
+            } else if (hasActive) {
+                int idx = ui.getActivePlaneChoice(player);
+                if (idx != -1) {
+                    selectedPlane = player.getPlanes()[idx];
+                    game.movePlane(selectedPlane, steps, false);
+                }
+
+            } else {
+                ui.displayNoMoves(player);
+            }
+
+            // === MERGE POINT: Calling your partner's code correctly ===
+            if (selectedPlane != null) {
+                handleOptionalMoves(selectedPlane, false);
+            }
+
+            if (steps == 6 && !game.getIfGameOver()) {
+                ui.displayMessage(player.getColor() + " rolled 6 - taking another turn!");
+                extraTurn = true;
+            } else {
+                extraTurn = false;
+            }
         }
 
-        handleOptionalMoves(plane, false);
-        game.nextTurn();
+        if (!game.getIfGameOver()) {
+            game.nextTurn();
+        }
     }
-
     /**
      * Handles optional shortcut and jump choices after a plane lands.
      *
@@ -79,5 +126,24 @@ public class GameController {
                 }
             }
         }
+    }
+private boolean hasPlaneAtHome(Player player) {
+        Plane[] planes = player.getPlanes();
+        for (int i = 0; i < planes.length; i++) {
+            if (planes[i].getIsAtHome()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasActivePlane(Player player) {
+        Plane[] planes = player.getPlanes();
+        for (int i = 0; i < planes.length; i++) {
+            if (!planes[i].getIsAtHome() && !planes[i].getIfWin()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

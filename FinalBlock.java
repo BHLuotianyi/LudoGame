@@ -32,10 +32,9 @@ public class FinalBlock extends FinalRouteBlock{
      */
     public void onLanding(Game game, Plane plane, boolean ifJumped) {
         super.onLanding(game, plane, ifJumped);
-        if (plane.getIsAtHome()) {
-            return; // Plane was sent home by collision; do not mark as finished
+        if (!plane.getIsAtHome()) {
+            this.removePlane(plane);
+            plane.win();
         }
-        this.removePlane(plane);
-        plane.win();
     }
 }

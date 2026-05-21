@@ -65,11 +65,10 @@ public abstract class Plane {
      * Has no effect if the plane has already finished.
      */
     public void win() {
-        if (this.ifWin) {
-            return; // Prevent double-counting
+        if (!this.ifWin) {
+            this.ifWin = true;
+            this.owner.setFinishedCount(this.owner.getFinishedCount() + 1);
         }
-        this.ifWin = true;
-        this.owner.setFinishedCount(this.owner.getFinishedCount() + 1);
     }
 
     /**

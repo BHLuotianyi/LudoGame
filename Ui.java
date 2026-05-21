@@ -11,19 +11,6 @@ public class Ui {
     /** The scanner used to read all user input from the console */
     private Scanner scanner;
 
-    /** ANSI Color Constants for a more professional terminal look: Reset code */
-    private static final String RESET = "\u001B[0m";
-    /** ANSI Color Constants: Bright Red */
-    private static final String RED_B = "\u001B[91m";
-    /** ANSI Color Constants: Bright Blue */
-    private static final String BLUE_B = "\u001B[94m";
-    /** ANSI Color Constants: Bright Yellow */
-    private static final String YELLOW_B = "\u001B[93m";
-    /** ANSI Color Constants: Bright Green */
-    private static final String GREEN_B = "\u001B[92m";
-    /** ANSI Color Constants: Cyan */
-    private static final String CYAN = "\u001B[36m";
-
     /**
      * Constructor - sets up the scanner for reading user input.
      */
@@ -37,10 +24,10 @@ public class Ui {
      * Displays the welcome screen shown at the very start of the game.
      */
     public void displayWelcome() {
-        System.out.println(CYAN + "==========================================" + RESET);
-        System.out.println(CYAN + "     WELCOME TO LUDO - PLANE EDITION     " + RESET);
-        System.out.println(CYAN + "   4 Players  |  4 Planes  |  1 Winner   " + RESET);
-        System.out.println(CYAN + "==========================================" + RESET);
+        System.out.println("==========================================");
+        System.out.println("     WELCOME TO LUDO - PLANE EDITION     ");
+        System.out.println("   4 Players  |  4 Planes  |  1 Winner   ");
+        System.out.println("==========================================");
         System.out.println();
     }
 
@@ -51,15 +38,15 @@ public class Ui {
      */
     public void displayBoard(Game game) {
         System.out.println();
-        System.out.println("============================================================");
-        System.out.println("  Turn: " + game.getTurnCount() + "  |  Current: " + getColorCode(game.getCurrPlayer().getColor()) + game.getCurrPlayer().getColor() + RESET);
-        System.out.println("============================================================");
+        System.out.println("=================================================================");
+        System.out.println("  Turn: " + game.getTurnCount() + "  |  Current: " + game.getCurrPlayer().getColor());
+        System.out.println("=================================================================");
         
         renderMap(game);
         
-        System.out.println("============================================================");
+        System.out.println("=================================================================");
         displayAllPlayerStatus(game.getPlayers(), game.getCurrPlayer());
-        System.out.println("============================================================");
+        System.out.println("=================================================================");
         System.out.println();
     }
 
@@ -83,60 +70,62 @@ public class Ui {
                 int x = coords[0];
                 int y = coords[1];
                 
-                String openB = "[";
-                String closeB = "]";
+                String strOpenBracket = "[";
+                String strCloseBracket = "]";
                 
                 if (map[i] instanceof ShortCutBlock) {
-                    openB = "(";
-                    closeB = ")";
+                    strOpenBracket = "(";
+                    strCloseBracket = ")";
                 }
                 
                 int id = map[i].getId();
-                if (id == 3 || id == 16 || id == 29 || id == 42) {
-                    openB = "{";
-                    closeB = "}";
+                if (id == 3 || id == 16 || id == 29 || id == 42) { // The block where planes goes to after leaving home
+                    strOpenBracket = "{";
+                    strCloseBracket = "}";
                 }
                 
                 Plane[] planesOnBlock = map[i].getLandingPlanes();
                 if (planesOnBlock != null && planesOnBlock[0] != null) {
                     String name = planesOnBlock[0].getName();
-                    String colorCode = getColorCode(planesOnBlock[0].getColor());
-                    if (planesOnBlock[1] != null) {
-                        grid[y][x] = colorCode + openB + name.charAt(0) + "+" + closeB + RESET;
+                    if (planesOnBlock[1] != null) { // If there's more than 1 plane, show a "+" sign
+                        grid[y][x] = strOpenBracket + name.substring(0, 1) + "+" + strCloseBracket;
                     } else {
-                        grid[y][x] = colorCode + openB + name + closeB + RESET;
+                        grid[y][x] = strOpenBracket + name + strCloseBracket;
                     }
                 } else {
-                    String color = map[i].getColor();
-                    String colorCode = getColorCode(color);
-                    grid[y][x] = colorCode + openB + "  " + closeB + RESET;
+                    grid[y][x] = strOpenBracket + map[i].getColor().substring(0,1) + " " + strCloseBracket;
                 }
             }
         }
 
-        for (Player p : game.getPlayers()) {
-            int hX = 0, hY = 0;
+        Player[] players = game.getPlayers();
+        for (int i = 0; i < players.length; i++) {
+            Player p = players[i];
+            int homeX = 0; // X-coordinate for home base display
+            int homeY = 0; // Y-coordinate for home base display
             String color = p.getColor();
             if (color.equals("RED")) {
-                hX = 2; hY = 2;
+                homeX = 2; homeY = 2;
             } else if (color.equals("BLUE")) {
-                hX = 12; hY = 2;
+                homeX = 12; homeY = 2;
             } else if (color.equals("YELLOW")) {
-                hX = 12; hY = 12;
+                homeX = 12; homeY = 12;
             } else if (color.equals("GREEN")) {
-                hX = 2; hY = 12;
+                homeX = 2; homeY = 12;
             }
             
             int homeCount = 0;
-            for (Plane pl : p.getHome()) {
+            Plane[] home = p.getHome();
+            for (int j = 0; j < home.length; j++) {
+                Plane pl = home[j];
                 if (pl != null) {
                     homeCount++;
                 }
             }
-            grid[hY][hX] = getColorCode(p.getColor()) + " " + homeCount + "H " + RESET;
+            grid[homeY][homeX] = " " + homeCount + "H ";
         }
 
-        System.out.print("     "); 
+        System.out.print("     "); // The paddings before the column numbers
         for (int x = 0; x < 15; x++) {
             System.out.printf(" %2d ", x);
         }
@@ -161,7 +150,7 @@ public class Ui {
      * @param i The block index
      * @return An array containing {x, y} coordinates, or null if index is invalid
      */
-    private int[] getCoords(int i) {
+    private int[] getCoords(int i) { // Understand this according to the 2D map that the game shows when running
         if (i >= 0 && i <= 5) {
             return new int[]{i, 6};
         }
@@ -216,28 +205,6 @@ public class Ui {
     }
 
     /**
-     * Returns the ANSI color code for a given color string.
-     * @param color The color name (e.g., "RED", "BLUE")
-     * @return The ANSI escape code for the color
-     */
-    private String getColorCode(String color) {
-        if (color == null) {
-            return RESET;
-        }
-        if (color.equals("RED") || color.equals("red") || color.equals("Red")) {
-            return RED_B;
-        } else if (color.equals("BLUE") || color.equals("blue") || color.equals("Blue")) {
-            return BLUE_B;
-        } else if (color.equals("YELLOW") || color.equals("yellow") || color.equals("Yellow")) {
-            return YELLOW_B;
-        } else if (color.equals("GREEN") || color.equals("green") || color.equals("Green")) {
-            return GREEN_B;
-        } else {
-            return RESET;
-        }
-    }
-
-    /**
      * Displays all four players' status rows.
      * @param players Array of all players in the game
      * @param currentPlayer The player whose turn it currently is
@@ -256,9 +223,8 @@ public class Ui {
      * @param isCurrent Whether this player is the current player
      */
     public void displayPlayerStatus(Player player, boolean isCurrent) {
-        String colorCode = getColorCode(player.getColor());
         if (isCurrent) {
-            System.out.print(colorCode + ">> " + player.getColor() + ": " + RESET);
+            System.out.print(">> " + player.getColor() + ": ");
         } else {
             System.out.print("   " + player.getColor() + ": ");
         }
@@ -281,7 +247,7 @@ public class Ui {
      * @param turnCount The current turn number
      */
     public void displayTurnStart(Player player, int turnCount) {
-        System.out.println(getColorCode(player.getColor()) + "--- " + player.getColor() + "'s TURN  (Turn #" + turnCount + ") ---" + RESET);
+        System.out.println("--- " + player.getColor() + "'s TURN  (Turn #" + turnCount + ") ---");
         System.out.println();
     }
 
@@ -296,7 +262,7 @@ public class Ui {
         System.out.println("  |   [ " + result + " ]  |");
         System.out.println("  +---------+");
         if (result == 6) {
-            System.out.println(YELLOW_B + "  ** Rolled a 6 - bonus turn! **" + RESET);
+            System.out.println("  ** Rolled a 6 - bonus turn! **");
         }
         System.out.println();
     }
@@ -314,7 +280,7 @@ public class Ui {
      * @param plane The plane that took off
      */
     public void displayTakeOff(Plane plane) {
-        System.out.println(getColorCode(plane.getColor()) + "  >> " + plane.getName() + " took off and is now on the board!" + RESET);
+        System.out.println("  >> " + plane.getName() + " took off and is now on the board!");
     }
 
     /**
@@ -334,7 +300,7 @@ public class Ui {
      * @param victim The plane that was sent back home
      */
     public void displayCollision(Plane attacker, Plane victim) {
-        System.out.println(RED_B + "  ** COLLISION! " + attacker.getName() + " hit " + victim.getName() + " -> sent back home! **" + RESET);
+        System.out.println("  ** COLLISION! " + attacker.getName() + " hit " + victim.getName() + " -> sent back home! **");
     }
 
     /**
@@ -344,7 +310,7 @@ public class Ui {
      */
     public void displaySameColorJump(Plane plane, int newPos) {
         int[] coords = getCoords(newPos);
-        System.out.println(getColorCode(plane.getColor()) + "  >> " + plane.getName() + " landed on same color - jumped to (" + coords[0] + "," + coords[1] + ")!" + RESET);
+        System.out.println("  >> " + plane.getName() + " landed on same color - jumped to (" + coords[0] + "," + coords[1] + ")!");
     }
 
     /**
@@ -354,7 +320,7 @@ public class Ui {
      */
     public void displayShortcutJump(Plane plane, int newPos) {
         int[] coords = getCoords(newPos);
-        System.out.println(getColorCode(plane.getColor()) + "  >> " + plane.getName() + " hit a SHORTCUT - jumped to (" + coords[0] + "," + coords[1] + ")!" + RESET);
+        System.out.println("  >> " + plane.getName() + " hit a SHORTCUT - jumped to (" + coords[0] + "," + coords[1] + ")!");
     }
 
     /**
@@ -362,7 +328,7 @@ public class Ui {
      * @param plane The plane entering the final route
      */
     public void displayEnterFinalRoute(Plane plane) {
-        System.out.println(getColorCode(plane.getColor()) + "  >> " + plane.getName() + " entered the FINAL ROUTE!" + RESET);
+        System.out.println("  >> " + plane.getName() + " entered the FINAL ROUTE!");
     }
 
     /**
@@ -370,7 +336,7 @@ public class Ui {
      * @param plane The plane that reached home
      */
     public void displayPlaneLanded(Plane plane) {
-        System.out.println(GREEN_B + "  ** " + plane.getName() + " reached HOME! **" + RESET);
+        System.out.println("  ** " + plane.getName() + " reached HOME! **");
     }
 
     /**
@@ -379,10 +345,10 @@ public class Ui {
      */
     public void displayGameOver(Player winner) {
         System.out.println();
-        System.out.println(YELLOW_B + "==========================================" + RESET);
-        System.out.println(YELLOW_B + "              GAME OVER!                  " + RESET);
-        System.out.println(YELLOW_B + "  WINNER: " + winner.getColor() + "!" + RESET);
-        System.out.println(YELLOW_B + "==========================================" + RESET);
+        System.out.println("==========================================");
+        System.out.println("              GAME OVER!                  ");
+        System.out.println("  WINNER: " + winner.getColor() + "!");
+        System.out.println("==========================================");
         System.out.println("        Thanks for playing Ludo!          ");
         System.out.println("==================================================");
         System.out.println();
@@ -436,7 +402,7 @@ public class Ui {
      * Displays an error message when the user enters invalid input.
      */
     public void displayInvalidInput() {
-        System.out.println(RED_B + "  [!] Invalid input - please try again." + RESET);
+        System.out.println("  [!] Invalid input - please try again.");
     }
 
     /**
@@ -452,7 +418,7 @@ public class Ui {
      * @return true if the user chooses to take off, false if they choose to move
      */
     public boolean askTakeOffOrMove() {
-        System.out.println(YELLOW_B + "  You rolled a 6! What do you want to do?" + RESET);
+        System.out.println("  You rolled a 6! What do you want to do?");
         System.out.println("    1. Take off a new plane from home");
         System.out.println("    2. Move an existing plane");
         System.out.print("  Enter choice (1 or 2): ");

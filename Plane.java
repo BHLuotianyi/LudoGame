@@ -62,8 +62,12 @@ public abstract class Plane {
 
     /**
      * Marks this plane as finished and increments its owner's finished-plane count.
+     * Has no effect if the plane has already finished.
      */
     public void win() {
+        if (this.ifWin) {
+            return; // Prevent double-counting
+        }
         this.ifWin = true;
         this.owner.setFinishedCount(this.owner.getFinishedCount() + 1);
     }

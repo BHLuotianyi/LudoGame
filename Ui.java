@@ -231,7 +231,9 @@ public class Ui {
 
         Plane[] planes = player.getPlanes();
         for (int i = 0; i < planes.length; i++) {
-            if (planes[i].getPos() == -1) {
+            if (planes[i].getIfWin()) {
+                System.out.print(planes[i].getName() + "(WIN)  ");
+            } else if (planes[i].getPos() == -1) {
                 System.out.print(planes[i].getName() + "(HOME)  ");
             } else {
                 int[] coords = getCoords(planes[i].getPos());

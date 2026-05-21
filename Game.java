@@ -289,6 +289,13 @@ public class Game {
     }
 
     /**
+     * Ends the game immediately, preventing further turns.
+     */
+    public void endGame() {
+        this.isGameOver = true;
+    }
+
+    /**
      * Reports whether the game has ended.
      *
      * @return true if the game is over; false otherwise

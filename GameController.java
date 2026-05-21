@@ -97,12 +97,10 @@ public class GameController {
                 if (game.canTakeShortcut(selectedPlane)) {
                     if (ui.askShortcut(selectedPlane)) {
                         game.takeShortcut(selectedPlane);
-                        ui.displayShortcutJump(selectedPlane, selectedPlane.getPos());
                     }
                 }
                 
-                // 2. Check for Jump (even if a shortcut was just taken)
-                // We pass 'false' because even if a shortcut was taken, it's not a 'jump'
+                // 2. Check for Jump
                 if (game.canJump(selectedPlane, false)) {
                     if (ui.askJump(selectedPlane)) {
                         game.movePlane(selectedPlane, 4, true);

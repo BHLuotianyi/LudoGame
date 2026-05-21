@@ -308,7 +308,6 @@ public class Game {
 
         MapBlock block = map[plane.getPos()];
         return (block instanceof MainMapBlock)
-                && !(block instanceof ShortCutBlock)
                 && plane.getColor().equals(block.getColor());
     }
 

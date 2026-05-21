@@ -28,3 +28,8 @@ Thumbs.db
 *.swp
 *~
 .nfs*
+
+# Rust / Local testing files
+autoplay/
+ludo-native
+__pycache__/

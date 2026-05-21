@@ -231,13 +231,17 @@ public class Ui {
 
         Plane[] planes = player.getPlanes();
         for (int i = 0; i < planes.length; i++) {
+            String planeName = planes[i].getName();
+            if (planes[i] instanceof CommanderPlane) {
+                planeName += "(C)";
+            }
             if (planes[i].getIfWin()) {
-                System.out.print(planes[i].getName() + "(WIN)  ");
+                System.out.print(planeName + "(WIN)  ");
             } else if (planes[i].getPos() == -1) {
-                System.out.print(planes[i].getName() + "(HOME)  ");
+                System.out.print(planeName + "(HOME)  ");
             } else {
                 int[] coords = getCoords(planes[i].getPos());
-                System.out.print(planes[i].getName() + "(" + coords[0] + "," + coords[1] + ")  ");
+                System.out.print(planeName + "(" + coords[0] + "," + coords[1] + ")  ");
             }
         }
         System.out.println();

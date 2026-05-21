@@ -274,6 +274,7 @@ public class Game {
 
     /**
      * Sends a plane back to its home area and removes it from its current block.
+     * Resets all movement state so the plane starts fresh when it takes off again.
      *
      * @param plane the plane to send home
      */
@@ -282,6 +283,8 @@ public class Game {
         plane.setIsAtHome(true);
         map[currPos].removePlane(plane); // Remove the plane from the block it is currently on
         plane.setPos(-1);
+        plane.setIsReversing(false);
+        plane.setIsMoving(false);
         plane.getOwner().addPlaneToHome(plane);
     }
 

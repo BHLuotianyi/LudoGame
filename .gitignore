@@ -35,4 +35,7 @@ ludo-native
 __pycache__/
 FastSimulator.java
 ludo-sim
+
+# Miscellaneous files
 *.pdf
+UMLs/

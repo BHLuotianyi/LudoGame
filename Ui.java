@@ -284,26 +284,6 @@ public class Ui {
     }
 
     /**
-     * Displays a message when a plane moves forward on the board.
-     * @param plane The plane that moved
-     * @param steps The number of steps moved
-     * @param newPos The new position of the plane
-     */
-    public void displayMove(Plane plane, int steps, int newPos) {
-        int[] coords = getCoords(newPos);
-        System.out.println("  >> " + plane.getName() + " moved " + steps + " steps -> now at (" + coords[0] + "," + coords[1] + ")");
-    }
-
-    /**
-     * Displays a collision message when one plane knocks another back home.
-     * @param attacker The plane that landed on the victim
-     * @param victim The plane that was sent back home
-     */
-    public void displayCollision(Plane attacker, Plane victim) {
-        System.out.println("  ** COLLISION! " + attacker.getName() + " hit " + victim.getName() + " -> sent back home! **");
-    }
-
-    /**
      * Displays a message when a plane lands on its own color and jumps forward.
      * @param plane The plane that jumped
      * @param newPos The position after the jump
@@ -311,32 +291,6 @@ public class Ui {
     public void displaySameColorJump(Plane plane, int newPos) {
         int[] coords = getCoords(newPos);
         System.out.println("  >> " + plane.getName() + " landed on same color - jumped to (" + coords[0] + "," + coords[1] + ")!");
-    }
-
-    /**
-     * Displays a message when a plane triggers a shortcut block.
-     * @param plane The plane that took the shortcut
-     * @param newPos The position after the shortcut jump
-     */
-    public void displayShortcutJump(Plane plane, int newPos) {
-        int[] coords = getCoords(newPos);
-        System.out.println("  >> " + plane.getName() + " hit a SHORTCUT - jumped to (" + coords[0] + "," + coords[1] + ")!");
-    }
-
-    /**
-     * Displays a message when a plane enters the final route toward home.
-     * @param plane The plane entering the final route
-     */
-    public void displayEnterFinalRoute(Plane plane) {
-        System.out.println("  >> " + plane.getName() + " entered the FINAL ROUTE!");
-    }
-
-    /**
-     * Displays a message when a plane successfully reaches home (finishes).
-     * @param plane The plane that reached home
-     */
-    public void displayPlaneLanded(Plane plane) {
-        System.out.println("  ** " + plane.getName() + " reached HOME! **");
     }
 
     /**
